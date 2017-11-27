@@ -5,3 +5,7 @@
 # PRLint
 
 > GitHub App for linting pull requests
+
+###### Credit
+
+- [“Pinch”](https://thenounproject.com/term/pinch/736992/) icon by Anna Ho from [the Noun Project](https://thenounproject.com/).
