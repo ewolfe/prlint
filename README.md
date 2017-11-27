@@ -1,5 +1,5 @@
-<p align='center'>
-![PRLint](./assets/logomark-stylized.svg)
+<p align="center">
+	<img width="248" src="./assets/logomark-stylized.svg" alt="PRLint">
 </p>
 
 # PRLint
