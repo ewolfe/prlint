@@ -17,7 +17,7 @@
 
 [https://github.com/apps/prlint](https://github.com/apps/prlint)
 
-[![Install](https://cdn.rawgit.com/ewolfe/prlint/90e46d36/assets/install-screenshot.png)](https://github.com/apps/prlint)
+[![Install](https://cdn.rawgit.com/ewolfe/prlint/master/assets/install-screenshot.png)](https://github.com/apps/prlint)
 
 ## Usage
 
