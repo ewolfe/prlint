@@ -22,14 +22,14 @@
 ## Usage
 
 1. Add this file `.github/prlint.json` to the root of your project:
-```json
+```javascript
 {
-	"title": [
-	  {
-	    "pattern": "^hello world",
-	    "flags": ["i"]
-	  }
-	]
+  "title": [
+    {
+      "pattern": "^hello world",
+      "flags": ["i"]
+    }
+  ]
 }
 ```
 
