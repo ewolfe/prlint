@@ -114,9 +114,12 @@ module.exports = async (req, res) => {
 
   if (req.url === '/webhook' && req.method === 'POST') {
     const body = await json(req);
-    console.log(body)
 
-    if (body && body.pull_request && body.installation && body.installation.id && accessTokens[`${body.installation.id}`]) {
+    if (body && !body.pull_request) {
+      send(res, 200, body);
+    } else if (body && body.action && body.action === 'closed') {
+      send(res, 200, body);
+    } else if (body && body.pull_request && body.installation && body.installation.id && accessTokens[`${body.installation.id}`]) {
       await updateShaStatus(body, res);
     } else if (body && body.pull_request && body.installation && body.installation.id && !accessTokens[`${body.installation.id}`]) {
       try {
@@ -131,8 +134,6 @@ module.exports = async (req, res) => {
       } catch (exception) {
         send(res, 500, exception);
       }
-    } else if (body && !body.pull_request) {
-      send(res, 200, body);
     } else {
       send(res, 400, `invalid request payload`);
     }
