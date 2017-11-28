@@ -13,11 +13,9 @@
 - Anything listed in the [pull request object](https://developer.github.com/v3/pulls/#get-a-single-pull-request
 )
 
-<p align="center">
-	<br />
-	<img width="248" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-success.png" alt="Success">
-	<img width="248" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-error.png" alt="Error">
-</p>
+[![Success](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-success.png)](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-success.png)
+
+[![Error](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-error.png)](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-error.png)
 
 ## Install
 
