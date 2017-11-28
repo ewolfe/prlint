@@ -30,7 +30,7 @@
 {
   "title": [
     {
-      "pattern": "^hello world",
+      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore):\\s",
       "flags": ["i"]
     }
   ]
