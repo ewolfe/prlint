@@ -115,9 +115,12 @@ module.exports = async (req, res) => {
     JWT = newJsonWebToken();
   }
 
+  if (req.url === '/status' && req.method === 'GET') {
+    res.end('OK')
+  }
+
   if (req.url === '/webhook' && req.method === 'POST') {
     const body = await json(req);
-
     if (body && !body.pull_request) {
       send(res, 200, body);
     } else if (body && body.action && body.action === 'closed') {
