@@ -58,7 +58,7 @@ You can use anything listed in the sample response object here https://developer
 
 To target a nested object, you can use dot notation encoded within the key string. i.e.:
 
-```json
+```javascript
 {
   "milestone.id": [
     {
