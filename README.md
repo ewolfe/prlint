@@ -57,10 +57,12 @@ To target a nested object, you can use dot notation encoded within the key strin
 
 ### Values:
 
-The top level values ire where you get to define your validation rules. You can have multiples rules, so we expect an array (even if you only have a single validation rule).
+The top level values are where you get to define your validation rules. You can have multiples rules, so we expect an array (even if you only have a single validation rule).
 
 - Each item in the array needs to be an object.
-- Each object requires a `pattern` key with a string value
+- Each object requires a `pattern` key with which is a javascript Regular Expression stored in a string
+- **Special characters must be escaped**
+    i.e. If you want to check for a whitespace, use `"pattern": "\\s"` instead of just `"pattern": "\s"`
 - The `flags` array is optional
 
 > See [RegExp Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) for full documentation on MDN.
