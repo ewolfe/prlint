@@ -45,7 +45,7 @@
 
 2. Then open a pull request as such:
   - Make sure your title is "chore: add prlint"
-		- You can also set the title to "CHORE: add prlint" since we passed the flag `i` which makes our regex case insensitive.
+    - You can also set the title to "CHORE: add prlint" since we passed the flag `i` which makes our regex case insensitive.
   - Make sure your branch name is `chore/add-prlint`
 
 ## API
