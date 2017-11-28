@@ -22,8 +22,7 @@
 ## Usage
 
 1. Add this file `.github/prlint.json` to the root of your project:
-
-	```json
+```json
 {
 	"title": [
 	  {
@@ -32,7 +31,8 @@
 	  }
 	]
 }
-	```
+```
+
 1. Then open a pull request with the title "hello world" to get a successful commit status. You can also set the title to "HELLO WORLD" since we passed the flag `i` which makes our regex case insensitive.
 
 ## API
