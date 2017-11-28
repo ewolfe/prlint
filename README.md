@@ -18,12 +18,6 @@
 
 [![Error](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-error.png)](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-error.png)
 
-## Install
-
-[https://github.com/apps/prlint](https://github.com/apps/prlint)
-
-[![Install](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-install.png)](https://github.com/apps/prlint)
-
 ## Motivation
 
 The goal of this app is to help projects reach the next level of consistency. Code linting tools like ESLint help produce top quality code, but software is so much more than just code. It’s organization, labeling, naming, tagging, filing, referencing... With this app installed on a repo/org you’ll be able to enforce a myriad of rules for your pull requests through the use of regular expressions.
@@ -34,6 +28,12 @@ This aims to be a generic solution for maintaining consistency. Some use cases:
 - Enforce branch folders
 - Enforce ticket numbers in title/description
 - Enforce labels to be be attached -->
+
+## Install
+
+[https://github.com/apps/prlint](https://github.com/apps/prlint)
+
+[![Install](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-install.png)](https://github.com/apps/prlint)
 
 ## Usage
 
