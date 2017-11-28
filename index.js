@@ -111,10 +111,6 @@ module.exports = async (req, res) => {
     res.end();
   }
 
-  if (req.url === '/') {
-    send(res, 200, accessTokens);
-  }
-
   if (jwtExpiration <= (Math.floor(Date.now() / 1000))) {
     JWT = newJsonWebToken();
   }
@@ -144,5 +140,8 @@ module.exports = async (req, res) => {
     } else {
       send(res, 400, `invalid request payload`);
     }
+  } else {
+    res.writeHead(301, {'Location': 'https://github.com/ewolfe/prlint'} );
+    res.end();
   }
 }
