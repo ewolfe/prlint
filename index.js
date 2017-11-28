@@ -131,7 +131,7 @@ module.exports = async (req, res) => {
       } catch (exception) {
         send(res, 500, exception);
       }
-    } else if (body && body.action && body.action === 'created') {
+    } else if (body && !body.pull_request) {
       send(res, 200, body);
     } else {
       send(res, 400, `invalid request payload`);
