@@ -113,4 +113,4 @@ If you’re reading this, congratulations! You’re one of the first ~250 users.
 
 ###### Convinced?
 
-Thanks for making it down this far. The hardest part of installation is clicking this link: ** [Install PRLint ⬇️](https://github.com/apps/prlint)**
+Thanks for making it down this far. The hardest part of installation is clicking this link: **[Install PRLint ⬇️](https://github.com/apps/prlint)**
