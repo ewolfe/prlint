@@ -2,7 +2,7 @@
 	<img width="248" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/logomark-stylized.svg" alt="PRLint">
 </p>
 
-# PRLint
+# PRLint [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779695827-b37294d12c5f3ad174528d33.svg)](https://stats.uptimerobot.com/ZzYnEf2BW)
 
 > GitHub App for linting pull requests
 
