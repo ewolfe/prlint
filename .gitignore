@@ -1,1 +1,2 @@
-gh-app.private-key.pem
+node_modules/
+.env

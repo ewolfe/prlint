@@ -1,0 +1,25 @@
+{
+  "name": "prlint",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ewolfe/prlint.git",
+  "author": "ewolfe <e@ewolfe.me>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently \"env-cmd .env micro-dev\" \"lt --subdomain prlint --port 3000\"",
+    "staging": "concurrently \"micro\" \"lt --subdomain prlint --port 3000\"",
+    "start": "micro"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1",
+    "env-cmd": "^7.0.0",
+    "localtunnel": "^1.8.3",
+    "micro-dev": "^1.4.0"
+  },
+  "dependencies": {
+    "flat": "^4.0.0",
+    "got": "^8.0.0",
+    "jsonwebtoken": "^8.1.0",
+    "micro": "^9.0.2"
+  }
+}
