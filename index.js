@@ -4,11 +4,14 @@ const got = require('got');
 const jsonwebtoken = require('jsonwebtoken');
 const { json, send } = require('micro');
 
+let jwtExpiration;
 function newJsonWebToken() {
+  jwtExpiration = Math.floor(Date.now() / 1000) + (10 * 1);
+
   // https://developer.github.com/apps/building-integrations/setting-up-and-registering-github-apps/about-authentication-options-for-github-apps/#authenticating-as-a-github-app
   const payload = {
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (10 * 60),
+    exp: jwtExpiration,
     iss: 7012 // https://github.com/settings/apps/prlint
   }
 
@@ -77,7 +80,7 @@ async function updateShaStatus(body, res) {
     }
   } catch (exception) {
     let description = exception.toString();
-    if (exception.response.statusCode === 404) {
+    if (exception.response && exception.response.statusCode === 404) {
       description = '`.github/prlint.json` not found'
     }
     const statusUrl = `https://api.github.com/repos/${body.repository.full_name}/statuses/${body.pull_request.head.sha}`
@@ -94,7 +97,7 @@ async function updateShaStatus(body, res) {
       },
       json: true
     });
-    send(res, 500, exception);
+    send(res, 500, description);
   }
 }
 
@@ -110,6 +113,10 @@ module.exports = async (req, res) => {
 
   if (req.url === '/') {
     send(res, 200, accessTokens);
+  }
+
+  if (jwtExpiration <= (Math.floor(Date.now() / 1000))) {
+    JWT = newJsonWebToken();
   }
 
   if (req.url === '/webhook' && req.method === 'POST') {
