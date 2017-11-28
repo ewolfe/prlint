@@ -1,5 +1,5 @@
 <p align="center">
-	<img width="248" src="https://cdn.rawgit.com/ewolfe/prlint/90e46d36/assets/logomark-stylized.svg" alt="PRLint">
+	<img width="248" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/logomark-stylized.svg" alt="PRLint">
 </p>
 
 # PRLint
@@ -13,11 +13,17 @@
 - Anything listed in the [pull request object](https://developer.github.com/v3/pulls/#get-a-single-pull-request
 )
 
+<p align="center">
+	<br />
+	<img width="248" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-success.png" alt="Success">
+	<img width="248" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-error.png" alt="Error">
+</p>
+
 ## Install
 
 [https://github.com/apps/prlint](https://github.com/apps/prlint)
 
-[![Install](https://cdn.rawgit.com/ewolfe/prlint/master/assets/install-screenshot.png)](https://github.com/apps/prlint)
+[![Install](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-install.png)](https://github.com/apps/prlint)
 
 ## Usage
 
@@ -67,7 +73,7 @@ The top level values are where you get to define your validation rules. You can 
 
 > See [RegExp Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) for full documentation on MDN.
 
-
+<img
 ## Support
 
 If you’re reading this, congratulations! You’re one of the first ~250 users. For any bugs or feature requests please send me a direct email at [e@ewolfe.me](mailto:e@ewolfe.me) or open an [issue](https://github.com/ewolfe/prlint/issues/new).
