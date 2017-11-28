@@ -13,6 +13,7 @@
 - Anything listed in the [pull request object](https://developer.github.com/v3/pulls/#get-a-single-pull-request
 )
 
+
 [![Success](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-success.png)](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-success.png)
 
 [![Error](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-error.png)](https://cdn.rawgit.com/ewolfe/prlint/master/assets/screenshot-error.png)
@@ -33,11 +34,19 @@
       "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore):\\s",
       "flags": ["i"]
     }
+  ],
+  "head.ref": [
+    {
+      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)/"
+    }
   ]
 }
 ```
 
-2. Then open a pull request with the title "hello world" to get a successful commit status. You can also set the title to "HELLO WORLD" since we passed the flag `i` which makes our regex case insensitive.
+2. Then open a pull request as such:
+  - Make sure your title is "chore: add prlint"
+		- You can also set the title to "CHORE: add prlint" since we passed the flag `i` which makes our regex case insensitive.
+  - Make sure your branch name is `chore/add-prlint`
 
 ## API
 
@@ -53,7 +62,7 @@ To target a nested object, you can use dot notation encoded within the key strin
 {
   "milestone.id": [
     {
-      "pattern": "\d"
+      "pattern": "\\d"
     }
   ]
 }
@@ -71,7 +80,6 @@ The top level values are where you get to define your validation rules. You can 
 
 > See [RegExp Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) for full documentation on MDN.
 
-<img
 ## Support
 
 If you’re reading this, congratulations! You’re one of the first ~250 users. For any bugs or feature requests please send me a direct email at [e@ewolfe.me](mailto:e@ewolfe.me) or open an [issue](https://github.com/ewolfe/prlint/issues/new).
