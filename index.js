@@ -79,11 +79,11 @@ async function updateShaStatus(body, res) {
       });
       send(res, 200, bodyPayload);
     } catch (exception) {
-      Raven.captureException(e);
+      Raven.captureException(exception);
       send(res, 500, exception);
     }
   } catch (exception) {
-    Raven.captureException(e);
+    Raven.captureException(exception);
     let description = exception.toString();
     if (exception.response && exception.response.statusCode === 404) {
       description = '`.github/prlint.json` not found'
@@ -143,7 +143,7 @@ module.exports = async (req, res) => {
         accessTokens[`${body.installation.id}`] = JSON.parse(response.body);
         await updateShaStatus(body, res);
       } catch (exception) {
-        Raven.captureException(e);
+        Raven.captureException(exception);
         send(res, 500, exception);
       }
     } else {
