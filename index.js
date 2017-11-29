@@ -6,7 +6,7 @@ const { json, send } = require('micro');
 
 let jwtExpiration;
 function newJsonWebToken() {
-  jwtExpiration = Math.floor(Date.now() / 1000) + (10 * 1);
+  jwtExpiration = Math.floor(Date.now() / 1000) + (10 * 60);
 
   // https://developer.github.com/apps/building-integrations/setting-up-and-registering-github-apps/about-authentication-options-for-github-apps/#authenticating-as-a-github-app
   const payload = {
