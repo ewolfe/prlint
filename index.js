@@ -2,7 +2,10 @@ const flatten = require('flat');
 const fs = require('fs');
 const got = require('got');
 const jsonwebtoken = require('jsonwebtoken');
+const Raven = require('raven');
 const { json, send } = require('micro');
+
+Raven.config('https://e84d90e8ec13450d924ddd1a19581c62:aa9224cf89544c0591bf839112161adf@sentry.io/251839').install();
 
 let jwtExpiration;
 function newJsonWebToken() {
@@ -76,9 +79,11 @@ async function updateShaStatus(body, res) {
       });
       send(res, 200, bodyPayload);
     } catch (exception) {
+      Raven.captureException(e);
       send(res, 500, exception);
     }
   } catch (exception) {
+    Raven.captureException(e);
     let description = exception.toString();
     if (exception.response && exception.response.statusCode === 404) {
       description = '`.github/prlint.json` not found'
@@ -138,6 +143,7 @@ module.exports = async (req, res) => {
         accessTokens[`${body.installation.id}`] = JSON.parse(response.body);
         await updateShaStatus(body, res);
       } catch (exception) {
+        Raven.captureException(e);
         send(res, 500, exception);
       }
     } else {
