@@ -5,7 +5,11 @@ const jsonwebtoken = require('jsonwebtoken');
 const Raven = require('raven');
 const { json, send } = require('micro');
 
-Raven.config('https://e84d90e8ec13450d924ddd1a19581c62:aa9224cf89544c0591bf839112161adf@sentry.io/251839').install();
+Raven.config('https://e84d90e8ec13450d924ddd1a19581c62:aa9224cf89544c0591bf839112161adf@sentry.io/251839', {
+  autoBreadcrumbs: {
+    http: true
+  }
+}).install();
 
 let jwtExpiration;
 function newJsonWebToken() {
@@ -46,7 +50,7 @@ async function updateShaStatus(body, res) {
         const regex = new RegExp(pattern, item.flags || '');
         pass = regex.test(pull_request_flat[element])
         if (!pass) {
-          failureMessages.push(`\`/${item.pattern}/.test('${pull_request_flat[element]}')\` failed`);
+          failureMessages.push(`\`/${item.pattern}/\` failed`);
         }
       })
     })
@@ -61,7 +65,7 @@ async function updateShaStatus(body, res) {
     } else {
       bodyPayload = {
         state: 'failure',
-        description: failureMessages[0],
+        description: failureMessages[0].slice(0, 140), // 140 characters is a GitHub limit
         target_url: `https://github.com/${body.repository.full_name}/blob/${body.pull_request.head.sha}/.github/prlint.json`,
         context: 'PRLint'
       }
@@ -80,7 +84,11 @@ async function updateShaStatus(body, res) {
       send(res, 200, bodyPayload);
     } catch (exception) {
       Raven.captureException(exception);
-      send(res, 500, exception);
+      send(res, 500, {
+        exception: exception,
+        request_body: bodyPayload,
+        response: exception.response.body
+      });
     }
   } catch (exception) {
     Raven.captureException(exception);
