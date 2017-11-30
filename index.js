@@ -50,7 +50,9 @@ async function updateShaStatus(body, res) {
         const regex = new RegExp(pattern, item.flags || '');
         pass = regex.test(pull_request_flat[element])
         if (!pass) {
-          failureMessages.push(`\`/${item.pattern}/\` failed`);
+          let message = `Rule \`${element}[${index}]\` failed`;
+          message = item.message || message;
+          failureMessages.push(message);
         }
       })
     })
@@ -63,9 +65,13 @@ async function updateShaStatus(body, res) {
         context: 'PRLint'
       };
     } else {
+      let description = failureMessages[0];
+      if (failureMessages.length > 1) {
+        description = `1/${failureMessages.length - 1}: ${description}`
+      }
       bodyPayload = {
         state: 'failure',
-        description: failureMessages[0].slice(0, 140), // 140 characters is a GitHub limit
+        description: description.slice(0, 140), // 140 characters is a GitHub limit
         target_url: `https://github.com/${body.repository.full_name}/blob/${body.pull_request.head.sha}/.github/prlint.json`,
         context: 'PRLint'
       }
