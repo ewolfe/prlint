@@ -108,7 +108,7 @@ If you’re reading this, congratulations! You’re one of the first ~250 users.
 
 ###### Credits
 
-- [“Pinch”](https://thenounproject.com/term/pinch/736992/) icon by Anna Ho from [the Noun Project](https://thenounproject.com/).
+- [“Dust Bunny”](https://thenounproject.com/term/lint/176538/) icon by Erika Kim from [the Noun Project](https://thenounproject.com/).
 
 
 ###### Convinced?
