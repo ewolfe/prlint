@@ -61,6 +61,10 @@ This aims to be a generic solution for maintaining consistency. Some use cases:
     - You can also set the title to "CHORE: add prlint" since we passed the flag `i` which makes our regex case insensitive.
   - Make sure your branch name is `chore/add-prlint`
 
+<p align="center">
+  <img src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/demo.gif" alt="Demo">
+</p>
+
 ## API
 
 ### Keys:
