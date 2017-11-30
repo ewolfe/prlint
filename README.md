@@ -43,12 +43,14 @@ This aims to be a generic solution for maintaining consistency. Some use cases:
   "title": [
     {
       "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore):\\s",
-      "flags": ["i"]
+      "flags": ["i"],
+      "message": "Your PR title doesn’t match our schema"
     }
   ],
   "head.ref": [
     {
-      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)/"
+      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)/",
+      "message": "Your branch name is invalid"
     }
   ]
 }
@@ -88,6 +90,7 @@ The top level values are where you get to define your validation rules. You can 
 - **Special characters must be escaped**
     i.e. If you want to check for a whitespace, use `"pattern": "\\s"` instead of just `"pattern": "\s"`
 - The `flags` array is optional
+- The `message` string is optional
 
 > See [RegExp Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax) for full documentation on MDN.
 
