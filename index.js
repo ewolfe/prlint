@@ -11,14 +11,11 @@ Raven.config('https://e84d90e8ec13450d924ddd1a19581c62:aa9224cf89544c0591bf83911
   }
 }).install();
 
-let jwtExpiration;
 function newJsonWebToken() {
-  jwtExpiration = Math.floor(Date.now() / 1000) + (10 * 60);
-
   // https://developer.github.com/apps/building-integrations/setting-up-and-registering-github-apps/about-authentication-options-for-github-apps/#authenticating-as-a-github-app
   const payload = {
     iat: Math.floor(Date.now() / 1000),
-    exp: jwtExpiration,
+    exp: Math.floor(Date.now() / 1000) + (10 * 60),
     iss: 7012 // https://github.com/settings/apps/prlint
   }
 
@@ -124,14 +121,15 @@ async function updateShaStatus(body, res) {
 const accessTokens = {};
 let JWT = newJsonWebToken();
 
+// Refresh the JSON Web Token every X milliseconds
+setTimeout(() => {
+  JWT = newJsonWebToken();
+}, 300000 /* 5 minutes */)
+
 module.exports = async (req, res) => {
   if (req.url === '/favicon.ico') {
     res.writeHead(200, {'Content-Type': 'image/x-icon'} );
     res.end();
-  }
-
-  if (jwtExpiration <= (Math.floor(Date.now() / 1000))) {
-    JWT = newJsonWebToken();
   }
 
   if (req.url === '/status' && req.method === 'GET') {
