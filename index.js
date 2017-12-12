@@ -122,7 +122,7 @@ const accessTokens = {};
 let JWT = newJsonWebToken();
 
 // Refresh the JSON Web Token every X milliseconds
-setTimeout(() => {
+setInterval(() => {
   JWT = newJsonWebToken();
 }, 300000 /* 5 minutes */)
 
