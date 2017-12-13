@@ -94,10 +94,13 @@ async function updateShaStatus(body, res) {
       });
     }
   } catch (exception) {
-    Raven.captureException(exception);
     let description = exception.toString();
+    let statusCode = 200;
     if (exception.response && exception.response.statusCode === 404) {
       description = '`.github/prlint.json` not found'
+    } else {
+      statusCode = 500;
+      Raven.captureException(exception);
     }
     const statusUrl = `https://api.github.com/repos/${body.repository.full_name}/statuses/${body.pull_request.head.sha}`
     const status = await got.post(statusUrl, {
@@ -113,7 +116,7 @@ async function updateShaStatus(body, res) {
       },
       json: true
     });
-    send(res, 500, description);
+    send(res, statusCode, description);
   }
 }
 
