@@ -142,9 +142,16 @@ module.exports = async (req, res) => {
       send(res, 200, body);
     } else if (body && body.action && body.action === 'closed') {
       send(res, 200, body);
-    } else if (body && body.pull_request && body.installation && body.installation.id && accessTokens[`${body.installation.id}`]) {
+    } else if (
+        body &&
+        body.pull_request &&
+        body.installation &&
+        body.installation.id &&
+        accessTokens[`${body.installation.id}`] &&
+        (new Date(accessTokens[`${body.installation.id}`].expires_at) > new Date()) // make sure token expires in the future
+      ) {
       await updateShaStatus(body, res);
-    } else if (body && body.pull_request && body.installation && body.installation.id && !accessTokens[`${body.installation.id}`]) {
+    } else if (body && body.pull_request && body.installation && body.installation.id) {
       try {
         const response = await got.post(`https://api.github.com/installations/${body.installation.id}/access_tokens`, {
           headers: {
