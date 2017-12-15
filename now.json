@@ -1,4 +1,6 @@
 {
+  "name": "prlint",
+  "alias": "prlint",
   "env": {
     "PRIVATE_KEY_B64": "@prlint-private-key"
   }
