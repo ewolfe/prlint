@@ -17,7 +17,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.7.0",
     "localtunnel": "^1.8.3",
-    "micro-dev": "^1.4.0"
+    "micro-dev": "^2.1.0"
   },
   "dependencies": {
     "flat": "^4.0.0",
