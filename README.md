@@ -46,7 +46,7 @@ This aims to be a generic solution for maintaining consistency. Some use cases:
     {
       "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore):\\s",
       "flags": ["i"],
-      "message": "Your PR title doesn’t match our schema"
+      "message": "Your PR title is in a bad format"
     }
   ],
   "head.ref": [
