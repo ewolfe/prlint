@@ -40,9 +40,10 @@ async function updateShaStatus(body, res) {
     const userConfigBase64 = JSON.parse(config.body).content
 
     let failureMessages = [];
-    
+    let userConfig;
+
     try {
-      const userConfig = JSON.parse(Buffer.from(userConfigBase64, 'base64'));
+      userConfig = JSON.parse(Buffer.from(userConfigBase64, 'base64'));
     } catch (e) {
       failureMessages.push(e);
     }
