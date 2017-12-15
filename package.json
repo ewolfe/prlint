@@ -22,7 +22,6 @@
   "dependencies": {
     "flat": "^4.0.0",
     "got": "^8.0.0",
-    "greenkeeper-lockfile": "^1.12.0",
     "jsonwebtoken": "^8.1.0",
     "micro": "^9.0.2",
     "raven": "^2.2.1"
