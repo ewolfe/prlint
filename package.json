@@ -13,6 +13,9 @@
   "devDependencies": {
     "concurrently": "^3.5.1",
     "env-cmd": "^7.0.0",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
     "localtunnel": "^1.8.3",
     "micro-dev": "^1.4.0"
   },
