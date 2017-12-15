@@ -38,9 +38,15 @@ async function updateShaStatus(body, res) {
     });
 
     const userConfigBase64 = JSON.parse(config.body).content
-    const userConfig = JSON.parse(Buffer.from(userConfigBase64, 'base64'));
 
     let failureMessages = [];
+    
+    try {
+      const userConfig = JSON.parse(Buffer.from(userConfigBase64, 'base64'));
+    } catch (e) {
+      failureMessages.push(e);
+    }
+
     Object.keys(userConfig).map(element => {
       userConfig[element].forEach((item, index) => {
         const pattern = item.pattern;
