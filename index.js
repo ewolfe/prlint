@@ -52,12 +52,16 @@ async function updateShaStatus(body, res) {
     Object.keys(userConfig).forEach((element) => {
       userConfig[element].forEach((item, index) => {
         const { pattern } = item;
-        const regex = new RegExp(pattern, item.flags || '');
-        const pass = regex.test(pullRequestFlat[element]);
-        if (!pass) {
-          let message = `Rule \`${element}[${index}]\` failed`;
-          message = item.message || message;
-          failureMessages.push(message);
+        try {
+          const regex = new RegExp(pattern, item.flags || '');
+          const pass = regex.test(pullRequestFlat[element]);
+          if (!pass) {
+            let message = `Rule \`${element}[${index}]\` failed`;
+            message = item.message || message;
+            failureMessages.push(message);
+          }
+        } catch (e) {
+          failureMessages.push(e);
         }
       });
     });
