@@ -49,22 +49,24 @@ async function updateShaStatus(body, res) {
       failureMessages.push(e);
     }
 
-    Object.keys(userConfig).forEach((element) => {
-      userConfig[element].forEach((item, index) => {
-        const { pattern } = item;
-        try {
-          const regex = new RegExp(pattern, item.flags || '');
-          const pass = regex.test(pullRequestFlat[element]);
-          if (!pass) {
-            let message = `Rule \`${element}[${index}]\` failed`;
-            message = item.message || message;
-            failureMessages.push(message);
+    if (userConfig) {
+      Object.keys(userConfig).forEach((element) => {
+        userConfig[element].forEach((item, index) => {
+          const { pattern } = item;
+          try {
+            const regex = new RegExp(pattern, item.flags || '');
+            const pass = regex.test(pullRequestFlat[element]);
+            if (!pass) {
+              let message = `Rule \`${element}[${index}]\` failed`;
+              message = item.message || message;
+              failureMessages.push(message);
+            }
+          } catch (e) {
+            failureMessages.push(e);
           }
-        } catch (e) {
-          failureMessages.push(e);
-        }
+        });
       });
-    });
+    }
 
     let bodyPayload = {};
     if (!failureMessages.length) {
