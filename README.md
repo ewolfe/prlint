@@ -6,7 +6,7 @@
 
 > GitHub App for linting pull requests
 
-[![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779695827-b37294d12c5f3ad174528d33.svg)](https://stats.uptimerobot.com/ZzYnEf2BW) 
+[![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779695827-b37294d12c5f3ad174528d33.svg)](https://stats.uptimerobot.com/ZzYnEf2BW)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ewolfe/prlint.svg)](https://greenkeeper.io/)
 
 - Lint pull request branch name
@@ -45,14 +45,14 @@ This aims to be a generic solution for maintaining consistency. Some use cases:
 {
   "title": [
     {
-      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore):\\s",
+      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)((.+))?:\\s.+",
       "flags": ["i"],
       "message": "Your PR title is in a bad format"
     }
   ],
   "head.ref": [
     {
-      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)/",
+      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)\\/.+",
       "message": "Your branch name is invalid"
     }
   ]
