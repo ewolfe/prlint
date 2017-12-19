@@ -100,7 +100,7 @@ async function updateShaStatus(body, res) {
       });
       send(res, 200, bodyPayload);
     } catch (exception) {
-      Raven.captureException(exception);
+      Raven.captureException(exception, { extra: userConfig });
       send(res, 500, {
         exception,
         request_body: bodyPayload,
