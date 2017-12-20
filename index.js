@@ -178,7 +178,10 @@ module.exports = async (req, res) => {
         await updateShaStatus(body, res);
       } catch (exception) {
         Raven.captureException(exception);
-        send(res, 500, exception);
+        send(res, 500, {
+          token: accessTokens[`${body.installation.id}`],
+          exception,
+        });
       }
     } else {
       send(res, 400, 'invalid request payload');
