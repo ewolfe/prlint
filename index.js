@@ -126,7 +126,7 @@ async function updateShaStatus(body, res) {
         state: 'error',
         description,
         context: 'PRLint',
-        target_url: 'https://github.com/ewolfe/prlint#support',
+        target_url: 'https://github.com/ewolfe/prlint/issues/new',
       },
       json: true,
     });
