@@ -141,6 +141,9 @@ setInterval(() => {
   JWT = newJsonWebToken();
 }, 300000 /* 5 minutes */);
 
+// This is the main entry point, our dep 'micro' expects a function that
+// accepts standard http.IncomingMessage and http.ServerResponse objects
+// https://github.com/zeit/micro#usage
 module.exports = async (req, res) => {
   if (req.url === '/favicon.ico') {
     res.writeHead(200, { 'Content-Type': 'image/x-icon' });

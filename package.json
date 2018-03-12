@@ -9,16 +9,20 @@
     "dev": "concurrently \"env-cmd .env micro-dev\" \"lt --subdomain prlint --port 3000\"",
     "staging": "concurrently \"micro\" \"lt --subdomain prlint --port 3000\"",
     "start": "micro",
-    "test": "echo \"TODO: Add tests\" && exit 0"
+    "test": "env-cmd .env ava"
   },
   "devDependencies": {
+    "ava": "^0.25.0",
     "concurrently": "^3.5.1",
     "env-cmd": "^7.0.0",
     "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "localtunnel": "^1.8.3",
-    "micro-dev": "^2.2.0"
+    "micro-dev": "^2.2.0",
+    "nock": "^9.2.3",
+    "request-promise-native": "^1.0.5",
+    "test-listen": "^1.1.0"
   },
   "dependencies": {
     "flat": "^4.0.0",
