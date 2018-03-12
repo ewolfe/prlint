@@ -9,7 +9,8 @@
     "dev": "concurrently \"env-cmd .env micro-dev\" \"lt --subdomain prlint --port 3000\"",
     "staging": "concurrently \"micro\" \"lt --subdomain prlint --port 3000\"",
     "start": "micro",
-    "test": "env-cmd .env ava"
+    "test": "nyc env-cmd .env ava",
+    "posttest": "nyc report --reporter=lcov"
   },
   "devDependencies": {
     "ava": "^0.25.0",
@@ -21,6 +22,7 @@
     "localtunnel": "^1.8.3",
     "micro-dev": "^2.2.0",
     "nock": "^9.2.3",
+    "nyc": "^11.4.1",
     "request-promise-native": "^1.0.5",
     "test-listen": "^1.1.0"
   },
