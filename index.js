@@ -1,8 +1,9 @@
 const flatten = require('flat');
 const got = require('got');
-const jsonwebtoken = require('jsonwebtoken');
 const Raven = require('raven');
 const { json, send } = require('micro');
+
+const newJsonWebToken = require('./utils/newJsonWebToken.js');
 
 const accessTokens = {};
 
@@ -11,19 +12,6 @@ Raven.config('https://e84d90e8ec13450d924ddd1a19581c62:aa9224cf89544c0591bf83911
     http: true,
   },
 }).install();
-
-function newJsonWebToken() {
-  // https://developer.github.com/apps/building-integrations/setting-up-and-registering-github-apps/about-authentication-options-for-github-apps/#authenticating-as-a-github-app
-  const payload = {
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (10 * 60),
-    iss: 7012, // https://github.com/settings/apps/prlint
-  };
-
-  const privateKeyBuffer = Buffer.from(process.env.PRIVATE_KEY_B64, 'base64');
-  const privateKey = privateKeyBuffer.toString('ascii');
-  return jsonwebtoken.sign(payload, privateKey, { algorithm: 'RS256' });
-}
 
 async function updateShaStatus(body, res) {
   const pullRequestFlat = flatten(body.pull_request);
