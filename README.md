@@ -66,7 +66,7 @@ It works by reading a configuration file within your project (which consists of 
 }
 ```
 
-1. Then open a pull request with the title "chore: add prlint"
+3. Then open a pull request with the title "chore: add prlint"
 
 <p align="center">
   <img src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/demo.gif" alt="Demo">
