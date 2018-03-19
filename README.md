@@ -10,18 +10,9 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/ewolfe/prlint.svg)](https://greenkeeper.io/)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/ewolfe/prlint)
 
-- Lint pull request branch name
-- Lint pull request title
-- Lint pull request description
-- Lint all the things...
-- Anything listed in the [pull request object](https://github.com/ewolfe/prlint/wiki/sample-pull-request-object
-)
-
-## Motivation
-
 This project was created after working on a team that had poor conventions for pull request titles/descriptions and git branch names.
 
-This tool solves those problems, and more. For example, you can:
+PRLint aims to solves those problems, and more. For example, you can:
 
 - Enforce PR’s to follow a naming convention for titles
 - Enforce PR’s to to have certain elements within a description
@@ -36,6 +27,8 @@ This tool solves those problems, and more. For example, you can:
 - Enforce PR’s to have a milestone before it can be merged
 - Enforce PR’s to have comments/commits/additions/deletions/changed files within a certain number range
 	- Set a limit on the number of additions/deletions that you can perform within a single PR
+- Enforce anything listed in the [pull request object](https://github.com/ewolfe/prlint/wiki/sample-pull-request-object)
+
 
 It works by reading a configuration file within your project (which consists of regular expressions) and returning a fail/pass status to your pull request. See the screenshots below.
 
@@ -103,6 +96,71 @@ The top level values are where you get to define your validation rules. You can 
 - `flags:` optional array of strings used in the [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
     - For example, this can be used to make your regex case insensitive
 - `message`: optional string for customizing the error message on the pull request page
+
+## Examples
+
+```javascript
+{
+  "title": [
+    {
+      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore):\\s",
+      "message": "Your PR title doesn’t match our schema"
+    }
+  ],
+  "body": [
+    {
+      "pattern": "JIRA-\\d{1,4}",
+      "message": "You need a JIRA ticket in your description"
+    },
+    {
+      "pattern": ".{1,}",
+      "message": "You need literally anything in your description"
+    }
+  ],
+  "head.ref": [
+    {
+      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)/",
+      "message": "Your branch name is invalid"
+    }
+  ],
+  "assignee.login": [
+    {
+      "pattern": ".+",
+      "message": "Your need to assign someone"
+    }
+  ],
+  "requested_reviewers.0.id": [
+    {
+      "pattern": "\\d",
+      "message": "You need at least 1 reviewer"
+    }
+  ],
+  "requested_reviewers.1.id": [
+    {
+      "pattern": "\\d",
+      "message": "You need at least 2 reviewers"
+    }
+  ],
+  "requested_teams.0.id": [
+    {
+      "pattern": "2691982",
+      "message": "The product team needs to be added as a reviewer"
+    }
+  ],
+  "additions": [
+    {
+      "pattern": "0|^[1-9]$|^[1-9]\\d$",
+      "message": "Your PR should have less than 99 additions"
+    }
+  ],
+  "labels.0.name": [
+    {
+      "pattern": "bug|enhancement|question",
+      "message": "Your PR should have a basic label attached as the first label"
+    }
+  ]
+}
+```
 
 ## Contribute
 
