@@ -11,7 +11,9 @@
     "start": "micro",
     "test": "nyc env-cmd .env ava --serial",
     "//": "echo 'we run ava in --serial because of issues with nock https://github.com/node-nock/nock/issues/541'",
-    "posttest": "nyc report --reporter=lcov --reporter=html"
+    "posttest": "nyc report --reporter=lcov --reporter=html",
+    "precommit": "lint-staged",
+    "lint": "eslint ./src/**/*.js ./test/**/*.js"
   },
   "devDependencies": {
     "ava": "^0.25.0",
@@ -20,6 +22,8 @@
     "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.0",
     "localtunnel": "^1.8.3",
     "micro-dev": "^2.2.0",
     "nock": "^9.2.3",

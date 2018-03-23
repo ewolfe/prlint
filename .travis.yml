@@ -8,6 +8,7 @@ before_script:
   - greenkeeper-lockfile-update
   - ./cc-test-reporter before-build
 script:
+  - yarn lint
   - yarn test
 after_script:
   - greenkeeper-lockfile-upload

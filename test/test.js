@@ -8,7 +8,7 @@ const test = require('ava');
 const payloadClosed = require('./payload-closed.json');
 const payloadFailure = require('./payload-failure.json');
 const payloadNormal = require('./payload-normal.json');
-const service = require('../index.js');
+const service = require('../src/app.js');
 
 test('ANY /<unhandled> should redirect to github.com/ewolfe/prlint', async (t) => {
   nock('https://github.com').get('/ewolfe/prlint').reply(200, 'OK');
