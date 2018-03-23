@@ -8,6 +8,7 @@
 
 [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779695827-b37294d12c5f3ad174528d33.svg)](https://stats.uptimerobot.com/ZzYnEf2BW)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ewolfe/prlint.svg)](https://greenkeeper.io/)
+[![David badge](https://david-dm.org/ewolfe/prlint.svg)](https://david-dm.org/ewolfe/prlint)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fb62a8bd830f8ae59327/test_coverage)](https://codeclimate.com/github/ewolfe/prlint)
 
 ## The Problem
