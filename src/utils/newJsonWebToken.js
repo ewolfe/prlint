@@ -4,7 +4,7 @@ module.exports = function newJsonWebToken() {
   // https://developer.github.com/apps/building-integrations/setting-up-and-registering-github-apps/about-authentication-options-for-github-apps/#authenticating-as-a-github-app
   const payload = {
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (10 * 60),
+    exp: Math.floor(Date.now() / 1000) + (10 * 60), // prettier-ignore
     iss: 7012, // https://github.com/settings/apps/prlint
   };
 

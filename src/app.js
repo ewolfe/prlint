@@ -7,18 +7,23 @@ const newJsonWebToken = require('./utils/newJsonWebToken.js');
 
 const accessTokens = {};
 
-Raven.config('https://e84d90e8ec13450d924ddd1a19581c62:aa9224cf89544c0591bf839112161adf@sentry.io/251839', {
-  autoBreadcrumbs: {
-    http: true,
+Raven.config(
+  'https://e84d90e8ec13450d924ddd1a19581c62:aa9224cf89544c0591bf839112161adf@sentry.io/251839',
+  {
+    autoBreadcrumbs: {
+      http: true,
+    },
   },
-}).install();
+).install();
 
 async function updateShaStatus(body, res) {
   const pullRequestFlat = flatten(body.pull_request);
   const accessToken = accessTokens[`${body.installation.id}`].token;
 
   try {
-    const configUrl = `https://api.github.com/repos/${body.repository.full_name}/contents/.github/prlint.json?ref=${body.pull_request.head.ref}`;
+    const configUrl = `https://api.github.com/repos/${
+      body.repository.full_name
+    }/contents/.github/prlint.json?ref=${body.pull_request.head.ref}`;
     const config = await got(configUrl, {
       headers: {
         Accept: 'application/vnd.github.machine-man-preview+json',
@@ -71,13 +76,17 @@ async function updateShaStatus(body, res) {
       bodyPayload = {
         state: 'failure',
         description: description.slice(0, 140), // 140 characters is a GitHub limit
-        target_url: `https://github.com/${body.repository.full_name}/blob/${body.pull_request.head.sha}/.github/prlint.json`,
+        target_url: `https://github.com/${body.repository.full_name}/blob/${
+          body.pull_request.head.sha
+        }/.github/prlint.json`,
         context: 'PRLint',
       };
     }
 
     try {
-      const statusUrl = `https://api.github.com/repos/${body.repository.full_name}/statuses/${body.pull_request.head.sha}`;
+      const statusUrl = `https://api.github.com/repos/${
+        body.repository.full_name
+      }/statuses/${body.pull_request.head.sha}`;
       await got.post(statusUrl, {
         headers: {
           Accept: 'application/vnd.github.machine-man-preview+json',
@@ -104,7 +113,9 @@ async function updateShaStatus(body, res) {
       statusCode = 500;
       Raven.captureException(exception);
     }
-    const statusUrl = `https://api.github.com/repos/${body.repository.full_name}/statuses/${body.pull_request.head.sha}`;
+    const statusUrl = `https://api.github.com/repos/${
+      body.repository.full_name
+    }/statuses/${body.pull_request.head.sha}`;
     await got.post(statusUrl, {
       headers: {
         Accept: 'application/vnd.github.machine-man-preview+json',
@@ -154,17 +165,27 @@ module.exports = async (req, res) => {
       body.installation &&
       body.installation.id &&
       accessTokens[`${body.installation.id}`] &&
-      (new Date(accessTokens[`${body.installation.id}`].expires_at) > new Date()) // make sure token expires in the future
+      new Date(accessTokens[`${body.installation.id}`].expires_at) > new Date() // make sure token expires in the future
     ) {
       await updateShaStatus(body, res);
-    } else if (body && body.pull_request && body.installation && body.installation.id) {
+    } else if (
+      body &&
+      body.pull_request &&
+      body.installation &&
+      body.installation.id
+    ) {
       try {
-        const response = await got.post(`https://api.github.com/installations/${body.installation.id}/access_tokens`, {
-          headers: {
-            Accept: 'application/vnd.github.machine-man-preview+json',
-            Authorization: `Bearer ${JWT}`,
+        const response = await got.post(
+          `https://api.github.com/installations/${
+            body.installation.id
+          }/access_tokens`,
+          {
+            headers: {
+              Accept: 'application/vnd.github.machine-man-preview+json',
+              Authorization: `Bearer ${JWT}`,
+            },
           },
-        });
+        );
         accessTokens[`${body.installation.id}`] = JSON.parse(response.body);
         await updateShaStatus(body, res);
       } catch (exception) {

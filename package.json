@@ -28,6 +28,7 @@
     "micro-dev": "^2.2.0",
     "nock": "^9.2.3",
     "nyc": "^11.4.1",
+    "prettier": "1.11.1",
     "request-promise-native": "^1.0.5",
     "test-listen": "^1.1.0"
   },
