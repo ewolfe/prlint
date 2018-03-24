@@ -7,7 +7,6 @@
 > GitHub App for linting pull requests
 
 [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779695827-b37294d12c5f3ad174528d33.svg)](https://stats.uptimerobot.com/ZzYnEf2BW)
-[![Greenkeeper badge](https://badges.greenkeeper.io/ewolfe/prlint.svg)](https://greenkeeper.io/)
 [![David badge](https://david-dm.org/ewolfe/prlint.svg)](https://david-dm.org/ewolfe/prlint)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fb62a8bd830f8ae59327/test_coverage)](https://codeclimate.com/github/ewolfe/prlint)
 
@@ -28,11 +27,12 @@ PRLint will let you run regular expressions against your pull request meta data.
 ## Example Rules
 
 `.github/prlint.json`
+
 ```javascript
 {
   "title": [
     {
-      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore):\\s",
+      "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test):\\s",
       "message": "Your title needs to be prefixed with a topic"
     }
   ],
@@ -49,7 +49,7 @@ PRLint will let you run regular expressions against your pull request meta data.
   ],
   "head.ref": [
     {
-      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)/",
+      "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test)/",
       "message": "Your branch name is invalid"
     }
   ],
@@ -96,20 +96,21 @@ You can check anything listed in the [pull request object](https://developer.git
 
 ## Install
 
-1. Install via https://github.com/apps/prlint
-1. Add this file `.github/prlint.json` to the root of your project:
+1.  Install via https://github.com/apps/prlint
+1.  Add this file `.github/prlint.json` to the root of your project:
+
 ```javascript
 {
   "title": [
     {
-      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)((.+))?:\\s.+",
+      "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test)((.+))?:\\s.+",
       "message": "Your title needs to be prefixed with a topic"
     }
   ]
 }
 ```
 
-3. Test it by opening a pull request with the title "chore: add prlint"
+3.  Test it by opening a pull request with the title "chore: add prlint"
 
 <p align="center">
   <img src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/demo.gif" alt="Demo">
@@ -140,17 +141,17 @@ To target a nested object, you can use dot notation encoded within the key strin
 
 The top level values are where you get to define your validation rules. You can have multiples rules, so we expect an array (even if you only have a single validation rule).
 
-- Each item in the array needs to be an object:
-- `pattern:` javascript [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax)
-  - *Special characters must be escaped*
+* Each item in the array needs to be an object:
+* `pattern:` javascript [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax)
+  * _Special characters must be escaped_
     i.e. If you want to check for a whitespace, use `"pattern": "\\s"` vs `"pattern": "\s"`
-- `flags:` optional array of strings used in the [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
-    - For example, this can be used to make your regex case insensitive
-- `message`: optional string for customizing the error message on the pull request page
+* `flags:` optional array of strings used in the [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+  * For example, this can be used to make your regex case insensitive
+* `message`: optional string for customizing the error message on the pull request page
 
 ## Credits
 
-- [“Dust Bunny”](https://thenounproject.com/term/lint/176538/) icon by Erika Kim from [the Noun Project](https://thenounproject.com/).
+* [“Dust Bunny”](https://thenounproject.com/term/lint/176538/) icon by Erika Kim from [the Noun Project](https://thenounproject.com/).
 
 ## License
 

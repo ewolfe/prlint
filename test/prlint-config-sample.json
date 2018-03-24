@@ -1,13 +1,13 @@
 {
   "title": [
     {
-      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore):\\s",
+      "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test):\\s",
       "message": "Your PR title doesn’t match our schema"
     }
   ],
   "head.ref": [
     {
-      "pattern": "^(feat|fix|docs|style|refactor|perf|test|chore)/",
+      "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test)/",
       "message": "Your branch name is invalid"
     }
   ]
