@@ -34,6 +34,11 @@ async function updateShaStatus(body, res) {
     const userConfigBase64 = JSON.parse(config.body).content;
 
     const failureMessages = [];
+    const failureURLs = [];
+    const defaultFailureURL = `https://github.com/${
+      body.repository.full_name
+    }/blob/${body.pull_request.head.sha}/.github/prlint.json`;
+
     let userConfig;
 
     try {
@@ -53,9 +58,12 @@ async function updateShaStatus(body, res) {
               let message = `Rule \`${element}[${index}]\` failed`;
               message = item.message || message;
               failureMessages.push(message);
+              const URL = item.detailsURL || defaultFailureURL;
+              failureURLs.push(URL);
             }
           } catch (e) {
             failureMessages.push(e);
+            failureURLs.push(defaultFailureURL);
           }
         });
       });
@@ -70,15 +78,15 @@ async function updateShaStatus(body, res) {
       };
     } else {
       let description = failureMessages[0];
+      let URL = failureURLs[0];
       if (failureMessages.length > 1) {
         description = `1/${failureMessages.length - 1}: ${description}`;
+        URL = defaultFailureURL;
       }
       bodyPayload = {
         state: 'failure',
         description: description.slice(0, 140), // 140 characters is a GitHub limit
-        target_url: `https://github.com/${body.repository.full_name}/blob/${
-          body.pull_request.head.sha
-        }/.github/prlint.json`,
+        target_url: URL,
         context: 'PRLint',
       };
     }

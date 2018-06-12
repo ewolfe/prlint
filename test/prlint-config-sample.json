@@ -2,13 +2,15 @@
   "title": [
     {
       "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test):\\s",
-      "message": "Your PR title doesn’t match our schema"
+      "message": "Your PR title doesn’t match our schema",
+      "detailsURL": "https://gph.is/1c4zf2O"
     }
   ],
   "head.ref": [
     {
       "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test)/",
-      "message": "Your branch name is invalid"
+      "message": "Your branch name is invalid",
+      "detailsURL": "https://gph.is/1c4zf2O"
     }
   ]
 }
