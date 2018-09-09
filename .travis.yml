@@ -1,6 +1,9 @@
 language: node_js
+cache:
+  directories:
+    - "node_modules" # This will tell Travis CI to cache the dependencies
 before_install:
-  - yarn global add greenkeeper-lockfile@1
+  - yarn global add greenkeeper-lockfile@1 now@11 --no-save
   - export PATH=$PATH:`yarn global bin`
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
@@ -13,3 +16,9 @@ script:
 after_script:
   - greenkeeper-lockfile-upload
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+deploy:
+  - provider: script
+    script: now scale prlint.now.sh sfo 1 --token $NOW_TOKEN && now scale prlint.now.sh bru 0 --token $NOW_TOKEN  && now --public --token $NOW_TOKEN && now remove prlint --safe --yes --token $NOW_TOKEN && now alias --token $NOW_TOKEN
+    skip_cleanup: true
+    on:
+      master: true
