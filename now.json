@@ -3,5 +3,8 @@
   "alias": "prlint",
   "env": {
     "PRIVATE_KEY_B64": "@prlint-private-key"
-  }
+  },
+  "files": [
+    ".git/refs"
+  ]
 }
