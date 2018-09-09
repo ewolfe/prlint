@@ -6,6 +6,7 @@
   },
   "files": [
     ".git/HEAD",
+    ".git/packed-refs",
     ".git/refs/headers/master",
     "src"
   ]
