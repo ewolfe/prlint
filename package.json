@@ -17,27 +17,27 @@
   },
   "devDependencies": {
     "ava": "^0.25.0",
-    "concurrently": "^3.5.1",
-    "env-cmd": "^7.0.0",
-    "eslint": "^4.18.2",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.9.0",
+    "concurrently": "^4.0.1",
+    "env-cmd": "^8.0.2",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.0",
-    "localtunnel": "^1.8.3",
-    "micro-dev": "^2.2.0",
-    "nock": "^9.2.3",
-    "nyc": "^11.4.1",
-    "prettier": "1.11.1",
+    "lint-staged": "^7.2.2",
+    "localtunnel": "^1.9.1",
+    "micro-dev": "^3.0.0",
+    "nock": "^9.6.1",
+    "nyc": "^13.0.1",
+    "prettier": "1.14.2",
     "request-promise-native": "^1.0.5",
     "test-listen": "^1.1.0"
   },
   "dependencies": {
-    "flat": "^4.0.0",
+    "flat": "^4.1.0",
     "git-rev-sync": "^1.12.0",
-    "got": "^8.3.0",
-    "jsonwebtoken": "^8.2.0",
-    "micro": "^9.1.2",
-    "raven": "^2.4.2"
+    "got": "^9.2.1",
+    "jsonwebtoken": "^8.3.0",
+    "micro": "^9.3.3",
+    "raven": "^2.6.4"
   }
 }
