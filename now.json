@@ -5,7 +5,8 @@
     "PRIVATE_KEY_B64": "@prlint-private-key"
   },
   "files": [
-    ".git",
+    ".git/HEAD",
+    ".git/refs/headers/master",
     "src"
   ]
 }
