@@ -18,7 +18,7 @@ after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 deploy:
   - provider: script
-    script: now scale prlint.now.sh sfo 1 --token $NOW_TOKEN && now scale prlint.now.sh bru 0 --token $NOW_TOKEN && now -d --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN && now remove prlint --safe --yes --token $NOW_TOKEN
+    script: now scale prlint.now.sh sfo 1 --token $NOW_TOKEN && now scale prlint.now.sh bru 0 --token $NOW_TOKEN && now remove prlint --safe --yes --token $NOW_TOKEN && now -d --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN && now remove prlint --safe --yes --token $NOW_TOKEN
     skip_cleanup: true
     on:
       master: true

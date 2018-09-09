@@ -7,7 +7,7 @@
   "files": [
     ".git/HEAD",
     ".git/packed-refs",
-    ".git/refs/headers/master",
+    ".git/refs/heads/master",
     "src"
   ]
 }
