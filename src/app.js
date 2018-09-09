@@ -1,4 +1,5 @@
 const flatten = require('flat');
+const git = require('git-rev-sync');
 const got = require('got');
 const Raven = require('raven');
 const { json, send } = require('micro');
@@ -159,6 +160,10 @@ module.exports = async (req, res) => {
 
   if (req.url === '/status' && req.method === 'GET') {
     res.end('OK');
+  }
+
+  if (req.url === '/version' && req.method === 'GET') {
+    res.end(git.short());
   }
 
   if (req.url === '/webhook' && req.method === 'POST') {
