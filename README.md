@@ -59,18 +59,6 @@ PRLint will let you run regular expressions against your pull request meta data.
       "message": "You need to assign someone"
     }
   ],
-  "requested_reviewers.0.id": [
-    {
-      "pattern": "\\d",
-      "message": "You need at least 1 reviewer"
-    }
-  ],
-  "requested_reviewers.1.id": [
-    {
-      "pattern": "\\d",
-      "message": "You need at least 2 reviewers"
-    }
-  ],
   "requested_teams.0.id": [
     {
       "pattern": "2691982",
