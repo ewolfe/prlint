@@ -20,11 +20,17 @@ Raven.config(
 async function updateShaStatus(body, res) {
   const pullRequestFlat = flatten(body.pull_request);
   const accessToken = accessTokens[`${body.installation.id}`].token;
+  const fullName = body.pull_request.head.repo.full_name;
 
   try {
-    const configUrl = `https://api.github.com/repos/${
-      body.repository.full_name
-    }/contents/.github/prlint.json?ref=${body.pull_request.head.ref}`;
+    let configUrl = `https://api.github.com/repos/${fullName}/contents/.github/prlint.json?ref=${
+      body.pull_request.head.ref
+    }`;
+    if (body.pull_request.head.repo.fork) {
+      configUrl = `https://api.github.com/repos/${body.pull_request.base.repo.full_name}/contents/.github/prlint.json?ref=${
+        body.pull_request.head.sha
+      }`;
+    }
     const config = await got(configUrl, {
       headers: {
         Accept: 'application/vnd.github.machine-man-preview+json',
@@ -36,9 +42,9 @@ async function updateShaStatus(body, res) {
 
     const failureMessages = [];
     const failureURLs = [];
-    const defaultFailureURL = `https://github.com/${
-      body.repository.full_name
-    }/blob/${body.pull_request.head.sha}/.github/prlint.json`;
+    const defaultFailureURL = `https://github.com/${fullName}/blob/${
+      body.pull_request.head.sha
+    }/.github/prlint.json`;
 
     let userConfig;
 
@@ -93,9 +99,7 @@ async function updateShaStatus(body, res) {
     }
 
     try {
-      const statusUrl = `https://api.github.com/repos/${
-        body.repository.full_name
-      }/statuses/${body.pull_request.head.sha}`;
+      const statusUrl = body.pull_request.statuses_url;
       await got.post(statusUrl, {
         headers: {
           Accept: 'application/vnd.github.machine-man-preview+json',
@@ -122,9 +126,7 @@ async function updateShaStatus(body, res) {
       statusCode = 500;
       Raven.captureException(exception);
     }
-    const statusUrl = `https://api.github.com/repos/${
-      body.repository.full_name
-    }/statuses/${body.pull_request.head.sha}`;
+    const statusUrl = body.pull_request.statuses_url;
     await got.post(statusUrl, {
       headers: {
         Accept: 'application/vnd.github.machine-man-preview+json',
