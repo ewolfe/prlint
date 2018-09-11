@@ -118,29 +118,42 @@ async function updateShaStatus(body, res) {
       });
     }
   } catch (exception) {
-    let description = exception.toString();
     let statusCode = 200;
+    const statusUrl = `https://api.github.com/repos/${
+      body.repository.full_name
+    }/statuses/${body.pull_request.head.sha}`;
     if (exception.response && exception.response.statusCode === 404) {
-      description = '`.github/prlint.json` not found';
+      await got.post(statusUrl, {
+        headers: {
+          Accept: 'application/vnd.github.machine-man-preview+json',
+          Authorization: `token ${accessToken}`,
+        },
+        body: {
+          state: 'success',
+          description: 'No rules are setup for PRLint',
+          context: 'PRLint',
+          target_url: 'https://github.com/apps/prlint',
+        },
+        json: true,
+      });
     } else {
       statusCode = 500;
       Raven.captureException(exception);
+      await got.post(statusUrl, {
+        headers: {
+          Accept: 'application/vnd.github.machine-man-preview+json',
+          Authorization: `token ${accessToken}`,
+        },
+        body: {
+          state: 'error',
+          description: 'An error occurred with PRLint. Click details to open an issue',
+          context: 'PRLint',
+          target_url: `https://github.com/ewolfe/prlint/issues/new?title=Exception Report&body=${encodeURIComponent(exception.toString())}`,
+        },
+        json: true,
+      });
     }
-    const statusUrl = body.pull_request.statuses_url;
-    await got.post(statusUrl, {
-      headers: {
-        Accept: 'application/vnd.github.machine-man-preview+json',
-        Authorization: `token ${accessToken}`,
-      },
-      body: {
-        state: 'error',
-        description,
-        context: 'PRLint',
-        target_url: 'https://github.com/ewolfe/prlint/issues/new',
-      },
-      json: true,
-    });
-    send(res, statusCode, description);
+    send(res, statusCode, exception.toString());
   }
 }
 
