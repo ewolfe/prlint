@@ -23,13 +23,12 @@ async function updateShaStatus(body, res) {
   const fullName = body.pull_request.head.repo.full_name;
 
   try {
-    let configUrl = `https://api.github.com/repos/${fullName}/contents/.github/prlint.json?ref=${
-      body.pull_request.head.ref
-    }`;
+    let configUrl = `https://api.github.com/repos/${fullName}/contents/.github/prlint.json?ref=${body
+      .pull_request.merge_commit_sha || body.pull_request.head.ref}`;
     if (body.pull_request.head.repo.fork) {
-      configUrl = `https://api.github.com/repos/${body.pull_request.base.repo.full_name}/contents/.github/prlint.json?ref=${
-        body.pull_request.head.sha
-      }`;
+      configUrl = `https://api.github.com/repos/${
+        body.pull_request.base.repo.full_name
+      }/contents/.github/prlint.json?ref=${body.pull_request.head.sha}`;
     }
     const config = await got(configUrl, {
       headers: {
@@ -146,9 +145,12 @@ async function updateShaStatus(body, res) {
         },
         body: {
           state: 'error',
-          description: 'An error occurred with PRLint. Click details to open an issue',
+          description:
+            'An error occurred with PRLint. Click details to open an issue',
           context: 'PRLint',
-          target_url: `https://github.com/ewolfe/prlint/issues/new?title=Exception Report&body=${encodeURIComponent(exception.toString())}`,
+          target_url: `https://github.com/ewolfe/prlint/issues/new?title=Exception Report&body=${encodeURIComponent(
+            exception.toString(),
+          )}`,
         },
         json: true,
       });
@@ -188,19 +190,19 @@ module.exports = async (req, res) => {
     } else if (body && body.action && body.action === 'closed') {
       send(res, 200, body);
     } else if (
-      body &&
-      body.pull_request &&
-      body.installation &&
-      body.installation.id &&
-      accessTokens[`${body.installation.id}`] &&
-      new Date(accessTokens[`${body.installation.id}`].expires_at) > new Date() // make sure token expires in the future
+      body
+      && body.pull_request
+      && body.installation
+      && body.installation.id
+      && accessTokens[`${body.installation.id}`]
+      && new Date(accessTokens[`${body.installation.id}`].expires_at) > new Date() // make sure token expires in the future
     ) {
       await updateShaStatus(body, res);
     } else if (
-      body &&
-      body.pull_request &&
-      body.installation &&
-      body.installation.id
+      body
+      && body.pull_request
+      && body.installation
+      && body.installation.id
     ) {
       try {
         const response = await got.post(
