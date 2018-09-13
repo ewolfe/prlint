@@ -94,12 +94,21 @@ async function updateShaStatus(body, res) {
         description = `1/${failureMessages.length - 1}: ${description}`;
         URL = defaultFailureURL;
       }
-      bodyPayload = {
-        state: 'failure',
-        description: description.slice(0, 140), // 140 characters is a GitHub limit
-        target_url: URL,
-        context: 'PRLint',
-      };
+      if (description) {
+        bodyPayload = {
+          state: 'failure',
+          description: description.slice(0, 140), // 140 characters is a GitHub limit
+          target_url: URL,
+          context: 'PRLint',
+        };
+      } else {
+        bodyPayload = {
+          state: 'failure',
+          description: 'Something went wrong with PRLint - You can help by opening an issue (click details)',
+          target_url: 'https://github.com/ewolfe/prlint/issues/new',
+          context: 'PRLint',
+        };
+      }
     }
 
     // POST the status to the pull request
