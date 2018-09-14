@@ -1,6 +1,4 @@
-<p align="center">
-	<img width="248" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/logomark-stylized.svg" alt="PRLint">
-</p>
+<img height="64px" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/logomark-stylized.svg" alt="PRLint"/>
 
 # PRLint
 
