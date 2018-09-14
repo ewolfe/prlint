@@ -7,7 +7,7 @@
   ],
   "head.ref": [
     {
-      "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test)/",
+      "pattern": "^(build|ci|docs|feat|fix|perf|refactor|style|test|greenkeeper)/",
       "message": "Name your branch like so: `<type>/`"
     }
   ]
