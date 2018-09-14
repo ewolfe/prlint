@@ -26,7 +26,7 @@
     "lint-staged": "^7.2.2",
     "localtunnel": "^1.9.1",
     "micro-dev": "^3.0.0",
-    "nock": "^9.6.1",
+    "nock": "^10.0.0",
     "nyc": "^13.0.1",
     "prettier": "1.14.2",
     "request-promise-native": "^1.0.5",
