@@ -12,7 +12,6 @@
     "test": "nyc env-cmd .env ava --serial",
     "//": "echo 'we run ava in --serial because of issues with nock https://github.com/node-nock/nock/issues/541'",
     "posttest": "nyc report --reporter=lcov --reporter=html",
-    "precommit": "lint-staged",
     "lint": "eslint ./src/**/*.js ./test/**/*.js"
   },
   "devDependencies": {
@@ -40,5 +39,10 @@
     "micro": "^9.3.3",
     "raven": "^2.6.4",
     "request": "^2.88.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
