@@ -59,23 +59,25 @@ async function updateShaStatus(body, res) {
     // Run each of the validations (regex's)
     if (prlintDotJson) {
       Object.keys(prlintDotJson).forEach((element) => {
-        (prlintDotJson[element] || []).forEach((item, index) => {
-          const { pattern } = item;
-          try {
-            const regex = new RegExp(pattern, item.flags || '');
-            const pass = regex.test(pullRequestFlattened[element]);
-            if (!pass || !pullRequestFlattened[element]) {
-              let message = `Rule \`${element}[${index}]\` failed`;
-              message = item.message || message;
-              failureMessages.push(message);
-              const URL = item.detailsURL || defaultFailureURL;
-              failureURLs.push(URL);
+        if (prlintDotJson[element]) {
+          prlintDotJson[element].forEach((item, index) => {
+            const { pattern } = item;
+            try {
+              const regex = new RegExp(pattern, item.flags || '');
+              const pass = regex.test(pullRequestFlattened[element]);
+              if (!pass || !pullRequestFlattened[element]) {
+                let message = `Rule \`${element}[${index}]\` failed`;
+                message = item.message || message;
+                failureMessages.push(message);
+                const URL = item.detailsURL || defaultFailureURL;
+                failureURLs.push(URL);
+              }
+            } catch (e) {
+              failureMessages.push(e);
+              failureURLs.push(defaultFailureURL);
             }
-          } catch (e) {
-            failureMessages.push(e);
-            failureURLs.push(defaultFailureURL);
-          }
-        });
+          });
+        }
       });
     }
 
