@@ -59,7 +59,7 @@ async function updateShaStatus(body, res) {
     // Run each of the validations (regex's)
     if (prlintDotJson) {
       Object.keys(prlintDotJson).forEach((element) => {
-        prlintDotJson[element].forEach((item, index) => {
+        (prlintDotJson[element] || []).forEach((item, index) => {
           const { pattern } = item;
           try {
             const regex = new RegExp(pattern, item.flags || '');
