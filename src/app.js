@@ -1,22 +1,14 @@
 const flatten = require('flat');
 const git = require('git-rev-sync');
 const got = require('got');
-const Raven = require('raven');
 const { json, send } = require('micro');
+const setupErrorReporting = require('./setupErrorReporting');
 
 const newJsonWebToken = require('./utils/newJsonWebToken.js');
 
 const accessTokens = {};
 
-// Setup error logging
-Raven.config(
-  'https://e84d90e8ec13450d924ddd1a19581c62:aa9224cf89544c0591bf839112161adf@sentry.io/251839',
-  {
-    autoBreadcrumbs: {
-      http: true,
-    },
-  },
-).install();
+const Raven = setupErrorReporting();
 
 async function updateShaStatus(body, res) {
   const accessToken = accessTokens[`${body.installation.id}`].token;
@@ -106,7 +98,8 @@ async function updateShaStatus(body, res) {
       } else {
         bodyPayload = {
           state: 'failure',
-          description: 'Something went wrong with PRLint - You can help by opening an issue (click details)',
+          description:
+            'Something went wrong with PRLint - You can help by opening an issue (click details)',
           target_url: 'https://github.com/ewolfe/prlint/issues/new',
           context: 'PRLint',
         };
