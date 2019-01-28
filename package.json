@@ -9,6 +9,7 @@
     "dev": "concurrently \"env-cmd .env micro-dev\" \"lt --subdomain prlint --port 3000\"",
     "staging": "concurrently \"micro\" \"lt --subdomain prlint --port 3000\"",
     "start": "micro",
+    "pretest": "./pretest.sh",
     "test": "nyc env-cmd .env ava --serial",
     "//": "echo 'we run ava in --serial because of issues with nock https://github.com/node-nock/nock/issues/541'",
     "posttest": "nyc report --reporter=lcov --reporter=html",
