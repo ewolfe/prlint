@@ -8,6 +8,11 @@ const newJsonWebToken = require('./utils/newJsonWebToken.js');
 
 const accessTokens = {};
 
+const {
+  GITHUB_URL = 'https://github.com',
+  GITHUB_API_URL = 'https://api.github.com',
+} = process.env;
+
 const Raven = setupErrorReporting();
 
 async function updateShaStatus(body, res) {
@@ -20,15 +25,15 @@ async function updateShaStatus(body, res) {
     const failureMessages = [];
     const failureURLs = [];
     const headRepoFullName = body.pull_request.head.repo.full_name;
-    const defaultFailureURL = `https://github.com/${headRepoFullName}/blob/${
+    const defaultFailureURL = `${GITHUB_URL}/${headRepoFullName}/blob/${
       body.pull_request.head.sha
     }/.github/prlint.json`;
 
     // Get the user's prlint.json settings (returned as base64 and decoded later)
-    let prlintDotJsonUrl = `https://api.github.com/repos/${headRepoFullName}/contents/.github/prlint.json?ref=${body
+    let prlintDotJsonUrl = `${GITHUB_API_URL}/repos/${headRepoFullName}/contents/.github/prlint.json?ref=${body
       .pull_request.merge_commit_sha || body.pull_request.head.ref}`;
     if (body.pull_request.head.repo.fork) {
-      prlintDotJsonUrl = `https://api.github.com/repos/${
+      prlintDotJsonUrl = `${GITHUB_API_URL}/repos/${
         body.pull_request.base.repo.full_name
       }/contents/.github/prlint.json?ref=${body.pull_request.head.sha}`;
     }
@@ -132,7 +137,7 @@ async function updateShaStatus(body, res) {
     // application (PRLint) had issues, or that they're missing
     // a configuration file (./.github/prlint.json)
     let statusCode = 200;
-    const statusUrl = `https://api.github.com/repos/${
+    const statusUrl = `${GITHUB_API_URL}/repos/${
       body.repository.full_name
     }/statuses/${body.pull_request.head.sha}`;
     if (exception.response && exception.response.statusCode === 404) {
@@ -145,7 +150,7 @@ async function updateShaStatus(body, res) {
           state: 'success',
           description: 'No rules are setup for PRLint',
           context: 'PRLint',
-          target_url: 'https://github.com/apps/prlint',
+          target_url: `${GITHUB_URL}/apps/prlint`,
         },
         json: true,
       });
@@ -233,7 +238,7 @@ module.exports = async (req, res) => {
       // so we can read ./.github/prlint.json from their repo
       try {
         const response = await got.post(
-          `https://api.github.com/installations/${
+          `${GITHUB_API_URL}/installations/${
             body.installation.id
           }/access_tokens`,
           {
