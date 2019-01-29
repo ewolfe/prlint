@@ -1,4 +1,5 @@
 <img height="64px" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/logomark-stylized.svg" alt="PRLint"/>
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 # PRLint
 
@@ -143,3 +144,15 @@ The top level values are where you get to define your validation rules. You can 
 ## License
 
 MIT
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars3.githubusercontent.com/u/781818?v=4" width="100px;" alt="Hrusikesh Panda"/><br /><sub><b>Hrusikesh Panda</b></sub>](http://about.me/hkpanda)<br />[🚇](#infra-mrchief "Infrastructure (Hosting, Build-Tools, etc)") [⚠️](https://github.com/ewolfe/prlint/commits?author=mrchief "Tests") [💻](https://github.com/ewolfe/prlint/commits?author=mrchief "Code") |
+| :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

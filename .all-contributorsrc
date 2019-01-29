@@ -1,0 +1,25 @@
+{
+  "projectName": "prlint",
+  "projectOwner": "ewolfe",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "mrchief",
+      "name": "Hrusikesh Panda",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/781818?v=4",
+      "profile": "http://about.me/hkpanda",
+      "contributions": [
+        "infra",
+        "test",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
