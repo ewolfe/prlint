@@ -1,5 +1,3 @@
-<img height="64px" src="https://cdn.rawgit.com/ewolfe/prlint/master/assets/logomark-stylized.svg" alt="PRLint"/>
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 # PRLint
 
@@ -9,6 +7,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/ewolfe/prlint.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/ewolfe/prlint.svg?branch=master)](https://travis-ci.org/ewolfe/prlint)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fb62a8bd830f8ae59327/test_coverage)](https://codeclimate.com/github/ewolfe/prlint)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 ## The Problem
 
