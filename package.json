@@ -6,14 +6,14 @@
   "author": "ewolfe <e@ewolfe.me>",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"env-cmd .env micro-dev\" \"lt --subdomain prlint --port 3000\"",
-    "staging": "concurrently \"micro\" \"lt --subdomain prlint --port 3000\"",
-    "start": "micro",
+    "dev": "concurrently \"env-cmd .env micro-dev src/app.js\" \"lt --subdomain prlint --port 3000\"",
+    "staging": "concurrently \"micro src/app.js\" \"lt --subdomain prlint --port 3000\"",
+    "start": "micro src/app.js",
     "pretest": "./pretest.sh",
     "test": "nyc env-cmd .env ava --serial",
     "//": "echo 'we run ava in --serial because of issues with nock https://github.com/node-nock/nock/issues/541'",
     "posttest": "nyc report --reporter=lcov --reporter=html",
-    "lint": "eslint ./src/**/*.js ./test/**/*.js"
+    "lint": "eslint ./index.js ./src/**/*.js ./test/**/*.js"
   },
   "devDependencies": {
     "ava": "^0.25.0",

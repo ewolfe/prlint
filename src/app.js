@@ -1,23 +1,15 @@
-const flatten = require('flat');
 const git = require('git-rev-sync');
 const got = require('got');
 const { json, send } = require('micro');
 const setupErrorReporting = require('./setupErrorReporting');
 
 const newJsonWebToken = require('./utils/newJsonWebToken.js');
-
-const accessTokens = {};
-
-const {
-  GITHUB_URL = 'https://github.com',
-  GITHUB_API_URL = 'https://api.github.com',
-} = process.env;
+const linter = require('./linter.js');
 
 const Raven = setupErrorReporting();
 
 async function updateShaStatus(body, res) {
   const accessToken = accessTokens[`${body.installation.id}`].token;
-  const pullRequestFlattened = flatten(body.pull_request);
 
   try {
     // Initialize variables
@@ -55,27 +47,12 @@ async function updateShaStatus(body, res) {
 
     // Run each of the validations (regex's)
     if (prlintDotJson) {
-      Object.keys(prlintDotJson).forEach((element) => {
-        if (prlintDotJson[element]) {
-          prlintDotJson[element].forEach((item, index) => {
-            const { pattern } = item;
-            try {
-              const regex = new RegExp(pattern, item.flags || '');
-              const pass = regex.test(pullRequestFlattened[element]);
-              if (!pass || !pullRequestFlattened[element]) {
-                let message = `Rule \`${element}[${index}]\` failed`;
-                message = item.message || message;
-                failureMessages.push(message);
-                const URL = item.detailsURL || defaultFailureURL;
-                failureURLs.push(URL);
-              }
-            } catch (e) {
-              failureMessages.push(e);
-              failureURLs.push(defaultFailureURL);
-            }
-          });
-        }
+      const lintErrors = linter({
+        prlintDotJson,
+        pullRequest: body.pull_request,
       });
+      failureMessages.push(...lintErrors.failureMessages);
+      failureURLs.push(...lintErrors.failureURLs);
     }
 
     // Build up a status for sending to the pull request
