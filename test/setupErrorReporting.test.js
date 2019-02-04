@@ -1,7 +1,7 @@
 const test = require('ava');
 const setupErrorReporting = require('../src/setupErrorReporting');
 
-test('should not require Raven if disabled via env var', async (t) => {
+test('should not require Raven if disabled via env var', async t => {
   process.env.DISABLE_RAVEN_LOG = true;
   const Raven = setupErrorReporting();
 

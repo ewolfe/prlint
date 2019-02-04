@@ -10,7 +10,7 @@ const payloadFailure = require('./payload-failure.json');
 const payloadNormal = require('./payload-normal.json');
 const service = require('../src/app.js');
 
-test('ANY /<unhandled> should redirect to github.com/ewolfe/prlint', async (t) => {
+test('ANY /<unhandled> should redirect to github.com/ewolfe/prlint', async t => {
   nock('https://github.com')
     .get('/ewolfe/prlint')
     .reply(200, 'OK');
@@ -20,19 +20,19 @@ test('ANY /<unhandled> should redirect to github.com/ewolfe/prlint', async (t) =
   nock.cleanAll();
 });
 
-test('GET /favicon.ico should return image/x-icon header', async (t) => {
+test('GET /favicon.ico should return image/x-icon header', async t => {
   const url = await listen(micro(service));
   const response = await request.head(`${url}/favicon.ico`);
   t.is('image/x-icon', response['content-type']);
 });
 
-test('GET /status should return OK', async (t) => {
+test('GET /status should return OK', async t => {
   const url = await listen(micro(service));
   const response = await request(`${url}/status`);
   t.is('OK', response);
 });
 
-test('POST /webhook should return payload if there’s no pull_request data', async (t) => {
+test('POST /webhook should return payload if there’s no pull_request data', async t => {
   const url = await listen(micro(service));
   const response = await request.post(`${url}/webhook`, {
     json: { foo: 'bar' },
@@ -40,7 +40,7 @@ test('POST /webhook should return payload if there’s no pull_request data', as
   t.deepEqual({ foo: 'bar' }, response);
 });
 
-test('POST /webhook should return payload if the PR is closed', async (t) => {
+test('POST /webhook should return payload if the PR is closed', async t => {
   const url = await listen(micro(service));
   const response = await request.post(`${url}/webhook`, {
     json: payloadClosed,
@@ -48,7 +48,7 @@ test('POST /webhook should return payload if the PR is closed', async (t) => {
   t.deepEqual(payloadClosed, response);
 });
 
-test('POST /webhook should return 400 if the PR payload is badly structured', async (t) => {
+test('POST /webhook should return 400 if the PR payload is badly structured', async t => {
   const url = await listen(micro(service));
   const response = await request.post(`${url}/webhook`, {
     json: { pull_request: {} },
@@ -58,7 +58,7 @@ test('POST /webhook should return 400 if the PR payload is badly structured', as
   t.is(400, response.statusCode);
 });
 
-test('POST /webhook should return a 500 if any access token logic fails', async (t) => {
+test('POST /webhook should return a 500 if any access token logic fails', async t => {
   // mock access_tokens response data from github
   const date = new Date();
   date.setDate(date.getDate() + 1 /* days  */);
@@ -79,7 +79,7 @@ test('POST /webhook should return a 500 if any access token logic fails', async 
   nock.cleanAll();
 });
 
-test('POST /webhook should return a 500 if any status update logic fails', async (t) => {
+test('POST /webhook should return a 500 if any status update logic fails', async t => {
   // mock access_tokens response data from github
   const date = new Date();
   date.setDate(date.getDate() + 1 /* days  */);
@@ -93,9 +93,7 @@ test('POST /webhook should return a 500 if any status update logic fails', async
 
   // mock status update response data from github
   const statuses = nock('https://api.github.com')
-    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${
-      payloadNormal.pull_request.head.sha
-    }`)
+    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${payloadNormal.pull_request.head.sha}`)
     .reply(500);
   statuses.persist(false);
 
@@ -112,7 +110,7 @@ test('POST /webhook should return a 500 if any status update logic fails', async
   nock.cleanAll();
 });
 
-test('POST /webhook should send POST to github api as a side effect', async (t) => {
+test('POST /webhook should send POST to github api as a side effect', async t => {
   // mock access_tokens response data from github
   const date = new Date();
   date.setDate(date.getDate() + 1 /* days  */);
@@ -128,18 +126,16 @@ test('POST /webhook should send POST to github api as a side effect', async (t) 
   const prlint = fs.readFileSync('test/prlint-config-sample.json', 'utf8');
   const buf = Buffer.from(prlint, 'utf8');
   const prlintDotJson = nock('https://api.github.com')
-    .get(`/repos/${
-      payloadNormal.repository.full_name
-    }/contents/.github/prlint.json?ref=${
-      payloadNormal.pull_request.head.ref
-    }`)
+    .get(
+      `/repos/${payloadNormal.repository.full_name}/contents/.github/prlint.json?ref=${
+        payloadNormal.pull_request.head.ref
+      }`,
+    )
     .reply(200, { content: buf.toString('base64') });
 
   // mock status update response data from github
   const statuses1 = nock('https://api.github.com')
-    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${
-      payloadNormal.pull_request.head.sha
-    }`)
+    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${payloadNormal.pull_request.head.sha}`)
     .reply(200);
   statuses1.persist(false);
 
@@ -158,16 +154,14 @@ test('POST /webhook should send POST to github api as a side effect', async (t) 
       token: 'token',
     });
   const prlintDotJson2 = nock('https://api.github.com')
-    .get(`/repos/${
-      payloadNormal.repository.full_name
-    }/contents/.github/prlint.json?ref=${
-      payloadNormal.pull_request.head.ref
-    }`)
+    .get(
+      `/repos/${payloadNormal.repository.full_name}/contents/.github/prlint.json?ref=${
+        payloadNormal.pull_request.head.ref
+      }`,
+    )
     .reply(200, { content: buf.toString('base64') });
   const statuses2 = nock('https://api.github.com')
-    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${
-      payloadNormal.pull_request.head.sha
-    }`)
+    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${payloadNormal.pull_request.head.sha}`)
     .reply(200, { success: true });
   statuses2.persist(false);
 
@@ -177,7 +171,7 @@ test('POST /webhook should send POST to github api as a side effect', async (t) 
   nock.cleanAll();
 });
 
-test('POST /webhook should add a failure status to the PR if it doesn’t pass the users rules', async (t) => {
+test('POST /webhook should add a failure status to the PR if it doesn’t pass the users rules', async t => {
   // mock access_tokens response data from github
   const date = new Date();
   date.setDate(date.getDate() + 1 /* days  */);
@@ -193,18 +187,16 @@ test('POST /webhook should add a failure status to the PR if it doesn’t pass t
   const prlint = fs.readFileSync('test/prlint-config-sample.json', 'utf8');
   const buf = Buffer.from(prlint, 'utf8');
   const prlintDotJson = nock('https://api.github.com')
-    .get(`/repos/${
-      payloadFailure.repository.full_name
-    }/contents/.github/prlint.json?ref=${
-      payloadFailure.pull_request.head.ref
-    }`)
+    .get(
+      `/repos/${payloadFailure.repository.full_name}/contents/.github/prlint.json?ref=${
+        payloadFailure.pull_request.head.ref
+      }`,
+    )
     .reply(200, { content: buf.toString('base64') });
 
   // mock status update response data from github
   const statuses = nock('https://api.github.com')
-    .post(`/repos/${payloadFailure.repository.full_name}/statuses/${
-      payloadFailure.pull_request.head.sha
-    }`)
+    .post(`/repos/${payloadFailure.repository.full_name}/statuses/${payloadFailure.pull_request.head.sha}`)
     .reply(200);
 
   // perform test
@@ -215,7 +207,7 @@ test('POST /webhook should add a failure status to the PR if it doesn’t pass t
   nock.cleanAll();
 });
 
-test('POST /webhook should add a failure status to the PR if it doesn’t pass the users rules', async (t) => {
+test('POST /webhook should add a failure status to the PR if it doesn’t pass the users rules', async t => {
   // mock access_tokens response data from github
   const date = new Date();
   date.setDate(date.getDate() + 1 /* days  */);
@@ -227,18 +219,16 @@ test('POST /webhook should add a failure status to the PR if it doesn’t pass t
   const prlint = fs.readFileSync('test/prlint-config-sample.json', 'utf8');
   const buf = Buffer.from(prlint, 'utf8');
   const prlintDotJson = nock('https://api.github.com')
-    .get(`/repos/${
-      payloadFailure.repository.full_name
-    }/contents/.github/prlint.json?ref=${
-      payloadFailure.pull_request.head.ref
-    }`)
+    .get(
+      `/repos/${payloadFailure.repository.full_name}/contents/.github/prlint.json?ref=${
+        payloadFailure.pull_request.head.ref
+      }`,
+    )
     .reply(200, { content: buf.toString('base64') });
 
   // mock status update response data from github
   const statuses = nock('https://api.github.com')
-    .post(`/repos/${payloadFailure.repository.full_name}/statuses/${
-      payloadFailure.pull_request.head.sha
-    }`)
+    .post(`/repos/${payloadFailure.repository.full_name}/statuses/${payloadFailure.pull_request.head.sha}`)
     // TODO: add failure payload to this post
     .reply(200);
 
@@ -250,7 +240,7 @@ test('POST /webhook should add a failure status to the PR if it doesn’t pass t
   nock.cleanAll();
 });
 
-test('POST /webhook should add an error status when prlint.json is missing', async (t) => {
+test('POST /webhook should add an error status when prlint.json is missing', async t => {
   // mock access_tokens response data from github
   const date = new Date();
   date.setDate(date.getDate() + 1 /* days  */);
@@ -263,18 +253,16 @@ test('POST /webhook should add an error status when prlint.json is missing', asy
 
   // mock prlint.json config response data from github
   const prlintDotJson = nock('https://api.github.com')
-    .get(`/repos/${
-      payloadNormal.repository.full_name
-    }/contents/.github/prlint.json?ref=${
-      payloadNormal.pull_request.head.ref
-    }`)
+    .get(
+      `/repos/${payloadNormal.repository.full_name}/contents/.github/prlint.json?ref=${
+        payloadNormal.pull_request.head.ref
+      }`,
+    )
     .reply(404);
 
   // mock status update response data from github
   const statuses = nock('https://api.github.com')
-    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${
-      payloadNormal.pull_request.head.sha
-    }`)
+    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${payloadNormal.pull_request.head.sha}`)
     // TODO: add error payload to this post
     .reply(200, { success: true });
 
@@ -289,7 +277,7 @@ test('POST /webhook should add an error status when prlint.json is missing', asy
   nock.cleanAll();
 });
 
-test('POST /webhook should send error status in the event of an unknown error', async (t) => {
+test('POST /webhook should send error status in the event of an unknown error', async t => {
   // mock access_tokens response data from github
   const date = new Date();
   date.setDate(date.getDate() + 1 /* days  */);
@@ -302,18 +290,16 @@ test('POST /webhook should send error status in the event of an unknown error', 
 
   // mock prlint.json config response data from github
   const prlintDotJson = nock('https://api.github.com')
-    .get(`/repos/${
-      payloadNormal.repository.full_name
-    }/contents/.github/prlint.json?ref=${
-      payloadNormal.pull_request.head.ref
-    }`)
+    .get(
+      `/repos/${payloadNormal.repository.full_name}/contents/.github/prlint.json?ref=${
+        payloadNormal.pull_request.head.ref
+      }`,
+    )
     .reply(500);
 
   // mock status update response data from github
   const statuses = nock('https://api.github.com')
-    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${
-      payloadNormal.pull_request.head.sha
-    }`)
+    .post(`/repos/${payloadNormal.repository.full_name}/statuses/${payloadNormal.pull_request.head.sha}`)
     // TODO: add error payload to this post
     .reply(200, { success: true });
 
