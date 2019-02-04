@@ -1,157 +1,59 @@
 const git = require('git-rev-sync');
-const got = require('got');
 const { json, send } = require('micro');
 const setupErrorReporting = require('./setupErrorReporting');
 
 const newJsonWebToken = require('./utils/newJsonWebToken.js');
 const linter = require('./linter.js');
+const GithubRepo = require('./github.js');
+const createBodyPayload = require('./bodyPayloadCreator.js');
 
 const Raven = setupErrorReporting();
 
-async function updateShaStatus(body, res) {
-  const accessToken = accessTokens[`${body.installation.id}`].token;
+const accessTokens = {};
 
+async function updateShaStatus(githubRepo, prlintDotJson, failureMessages, failureURLs, accessToken, res) {
   try {
-    // Initialize variables
-    let prlintDotJson;
-    const failureMessages = [];
-    const failureURLs = [];
-    const headRepoFullName = body.pull_request.head.repo.full_name;
-    const defaultFailureURL = `${GITHUB_URL}/${headRepoFullName}/blob/${
-      body.pull_request.head.sha
-    }/.github/prlint.json`;
-
-    // Get the user's prlint.json settings (returned as base64 and decoded later)
-    let prlintDotJsonUrl = `${GITHUB_API_URL}/repos/${headRepoFullName}/contents/.github/prlint.json?ref=${body
-      .pull_request.merge_commit_sha || body.pull_request.head.ref}`;
-    if (body.pull_request.head.repo.fork) {
-      prlintDotJsonUrl = `${GITHUB_API_URL}/repos/${
-        body.pull_request.base.repo.full_name
-      }/contents/.github/prlint.json?ref=${body.pull_request.head.sha}`;
-    }
-    const prlintDotJsonMeta = await got(prlintDotJsonUrl, {
-      headers: {
-        Accept: 'application/vnd.github.machine-man-preview+json',
-        Authorization: `token ${accessToken}`,
-      },
+    const bodyPayload = githubRepo.createBodyPayload({
+      failureMessages,
+      failureURLs,
     });
-
-    // Convert the base64 contents to an actual JSON object
     try {
-      prlintDotJson = JSON.parse(
-        Buffer.from(JSON.parse(prlintDotJsonMeta.body).content, 'base64'),
-      );
-    } catch (e) {
-      failureMessages.push(e);
-    }
-
-    // Run each of the validations (regex's)
-    if (prlintDotJson) {
-      const lintErrors = linter({
-        prlintDotJson,
-        pullRequest: body.pull_request,
+      // Build up a status for sending to the pull request
+      // POST the status to the pull request
+      await githubRepo.postValidationStatus({
+        bodyPayload,
+        accessToken,
       });
-      failureMessages.push(...lintErrors.failureMessages);
-      failureURLs.push(...lintErrors.failureURLs);
-    }
 
-    // Build up a status for sending to the pull request
-    let bodyPayload = {};
-    if (!failureMessages.length) {
-      bodyPayload = {
-        state: 'success',
-        description: 'Your validation rules passed',
-        context: 'PRLint',
-      };
-    } else {
-      let description = failureMessages[0];
-      let URL = failureURLs[0];
-      if (failureMessages.length > 1) {
-        description = `1/${failureMessages.length - 1}: ${description}`;
-        URL = defaultFailureURL;
-      }
-      if (description) {
-        bodyPayload = {
-          state: 'failure',
-          description: description.slice(0, 140), // 140 characters is a GitHub limit
-          target_url: URL,
-          context: 'PRLint',
-        };
-      } else {
-        bodyPayload = {
-          state: 'failure',
-          description:
-            'Something went wrong with PRLint - You can help by opening an issue (click details)',
-          target_url: 'https://github.com/ewolfe/prlint/issues/new',
-          context: 'PRLint',
-        };
-      }
-    }
-
-    // POST the status to the pull request
-    try {
-      const statusUrl = body.pull_request.statuses_url;
-      await got.post(statusUrl, {
-        headers: {
-          Accept: 'application/vnd.github.machine-man-preview+json',
-          Authorization: `token ${accessToken}`,
-        },
-        body: bodyPayload,
-        json: true,
-      });
-      send(res, 200, bodyPayload);
+      return { status: 200, payload: bodyPayload };
     } catch (exception) {
       Raven.captureException(exception, { extra: prlintDotJson });
-      send(res, 500, {
-        exception,
-        request_body: bodyPayload,
-        response: exception.response.body,
-      });
+
+      return {
+        status: 500,
+        payload: {
+          exception,
+          request_body: bodyPayload,
+          response: exception.response.body,
+        },
+      };
     }
   } catch (exception) {
     // If anyone of the "happy path" logic above failed
     // then we post an update to the pull request that our
     // application (PRLint) had issues, or that they're missing
     // a configuration file (./.github/prlint.json)
-    let statusCode = 200;
-    const statusUrl = `${GITHUB_API_URL}/repos/${
-      body.repository.full_name
-    }/statuses/${body.pull_request.head.sha}`;
+    let status = 200;
     if (exception.response && exception.response.statusCode === 404) {
-      await got.post(statusUrl, {
-        headers: {
-          Accept: 'application/vnd.github.machine-man-preview+json',
-          Authorization: `token ${accessToken}`,
-        },
-        body: {
-          state: 'success',
-          description: 'No rules are setup for PRLint',
-          context: 'PRLint',
-          target_url: `${GITHUB_URL}/apps/prlint`,
-        },
-        json: true,
-      });
+      createBodyPayload({ status: 404 });
+      await githubRepo.post404Status({ accessToken });
     } else {
-      statusCode = 500;
+      status = 500;
       Raven.captureException(exception);
-      await got.post(statusUrl, {
-        headers: {
-          Accept: 'application/vnd.github.machine-man-preview+json',
-          Authorization: `token ${accessToken}`,
-        },
-        body: {
-          state: 'error',
-          description:
-            'An error occurred with PRLint. Click details to open an issue',
-          context: 'PRLint',
-          target_url: `https://github.com/ewolfe/prlint/issues/new?title=Exception Report&body=${encodeURIComponent(
-            exception.toString(),
-          )}`,
-        },
-        json: true,
-      });
+      await githubRepo.post500Status({ accessToken, exception });
     }
-    send(res, statusCode, exception.toString());
+
+    return { status, payload: exception.toString() };
   }
 }
 
@@ -187,57 +89,82 @@ module.exports = async (req, res) => {
   // Used by GitHub
   if (req.url === '/webhook' && req.method === 'POST') {
     const body = await json(req);
-    if (body && !body.pull_request) {
-      // We just return the data that was sent to the webhook
-      // since there's not really anything for us to do in this situation
-      send(res, 200, body);
-    } else if (body && body.action && body.action === 'closed') {
-      // No point in linting anything if the pull request is closed
-      send(res, 200, body);
-    } else if (
-      body
-      && body.pull_request
-      && body.installation
-      && body.installation.id
-      && accessTokens[`${body.installation.id}`]
-      && new Date(accessTokens[`${body.installation.id}`].expires_at) > new Date() // make sure token expires in the future
-    ) {
-      // This is our main "happy path"
-      await updateShaStatus(body, res);
-    } else if (
-      body
-      && body.pull_request
-      && body.installation
-      && body.installation.id
-    ) {
-      // This is our secondary "happy path"
-      // But we need to fetch an access token first
-      // so we can read ./.github/prlint.json from their repo
-      try {
-        const response = await got.post(
-          `${GITHUB_API_URL}/installations/${
-            body.installation.id
-          }/access_tokens`,
-          {
-            headers: {
-              Accept: 'application/vnd.github.machine-man-preview+json',
-              Authorization: `Bearer ${JWT}`,
-            },
-          },
-        );
-        accessTokens[`${body.installation.id}`] = JSON.parse(response.body);
-        await updateShaStatus(body, res);
-      } catch (exception) {
-        Raven.captureException(exception);
-        send(res, 500, {
-          token: accessTokens[`${body.installation.id}`],
-          exception,
-        });
-      }
-    } else {
+
+    if (!body) {
       // Doubtful GitHub will ever end up at this block
       // but it was useful while I was developing
       send(res, 400, 'invalid request payload');
+      return;
+    }
+
+    if (!body.pull_request) {
+      // We just return the data that was sent to the webhook
+      // since there's not really anything for us to do in this situation
+      send(res, 200, body);
+      return;
+    }
+
+    if (body.action && body.action === 'closed') {
+      // No point in linting anything if the pull request is closed
+      send(res, 200, body);
+      return;
+    }
+
+    if (!body.installation || !body.installation.id) {
+      // Doubtful GitHub will ever end up at this block
+      // but it was useful while I was developing
+      send(res, 400, 'missing installation id, see if the app was registered correctly');
+      return;
+    }
+
+    const githubRepo = new GithubRepo(body);
+
+    try {
+      let accessToken = accessTokens[`${body.installation.id}`];
+      if (
+        !accessToken ||
+        !new Date(accessToken.expires_at) > new Date() // make sure token expires in the future
+      ) {
+        // token has expired or not valid. in this case, get a new one
+        accessToken = await githubRepo.getAccessToken({ JWT });
+        accessTokens[`${body.installation.id}`] = accessToken;
+      }
+
+      // Initialize variables
+      const failureMessages = [];
+      const failureURLs = [];
+
+      const { prlintDotJson, failureMessages: prlintFetchFailureMsgs } = await githubRepo.fetchPRLintJson({
+        accessToken,
+      });
+
+      failureMessages.push(...prlintFetchFailureMsgs);
+
+      // Run each of the validations (regex's)
+      if (prlintDotJson) {
+        const { failureMessages: linterFailureMsgs, failureURLs: linterFailureURLs } = linter({
+          prlintDotJson,
+          pullRequest: body.pull_request,
+        });
+        failureMessages.push(...linterFailureMsgs);
+        failureURLs.push(...linterFailureURLs);
+      }
+
+      const { status, payload } = await updateShaStatus({
+        githubRepo,
+        prlintDotJson,
+        failureMessages,
+        failureURLs,
+        accessToken,
+        res,
+      });
+      send(res, status, payload);
+    } catch (exception) {
+      Raven.captureException(exception);
+      send(res, 500, {
+        token: accessTokens[`${body.installation.id}`],
+        exception,
+      });
     }
   } else {
     // Redirect since we don't need anyone visiting our service
