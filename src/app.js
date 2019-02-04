@@ -5,13 +5,12 @@ const setupErrorReporting = require('./setupErrorReporting');
 const newJsonWebToken = require('./utils/newJsonWebToken.js');
 const linter = require('./linter.js');
 const GithubRepo = require('./github.js');
-const createBodyPayload = require('./bodyPayloadCreator.js');
 
 const Raven = setupErrorReporting();
 
 const accessTokens = {};
 
-async function updateShaStatus(githubRepo, prlintDotJson, failureMessages, failureURLs, accessToken, res) {
+async function updateShaStatus({ githubRepo, prlintDotJson, failureMessages, failureURLs, accessToken }) {
   try {
     const bodyPayload = githubRepo.createBodyPayload({
       failureMessages,
@@ -27,6 +26,7 @@ async function updateShaStatus(githubRepo, prlintDotJson, failureMessages, failu
 
       return { status: 200, payload: bodyPayload };
     } catch (exception) {
+      console.log('----------------------- 1-----------------');
       Raven.captureException(exception, { extra: prlintDotJson });
 
       return {
@@ -43,9 +43,9 @@ async function updateShaStatus(githubRepo, prlintDotJson, failureMessages, failu
     // then we post an update to the pull request that our
     // application (PRLint) had issues, or that they're missing
     // a configuration file (./.github/prlint.json)
+    console.log('----------------------- 2 -----------------');
     let status = 200;
     if (exception.response && exception.response.statusCode === 404) {
-      createBodyPayload({ status: 404 });
       await githubRepo.post404Status({ accessToken });
     } else {
       status = 500;
@@ -139,6 +139,8 @@ module.exports = async (req, res) => {
       });
 
       failureMessages.push(...prlintFetchFailureMsgs);
+      console.log('----------------------- 4 -----------------');
+      console.log(prlintDotJson, '\n', failureMessages);
 
       // Run each of the validations (regex's)
       if (prlintDotJson) {
@@ -156,10 +158,10 @@ module.exports = async (req, res) => {
         failureMessages,
         failureURLs,
         accessToken,
-        res,
       });
       send(res, status, payload);
     } catch (exception) {
+      console.log('----------------------- 3 -----------------');
       Raven.captureException(exception);
       send(res, 500, {
         token: accessTokens[`${body.installation.id}`],

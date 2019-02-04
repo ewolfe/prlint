@@ -3,7 +3,7 @@ const got = require('got');
 const { GITHUB_URL = 'https://github.com', GITHUB_API_URL = 'https://api.github.com' } = process.env;
 
 class GithubRepo {
-  constructor({ pull_request, installation: { id } }) {
+  constructor({ pull_request, repository, installation: { id } }) {
     const { head, base, merge_commit_sha } = pull_request;
     const headRepoFullName = head.repo.full_name;
 
@@ -21,7 +21,7 @@ class GithubRepo {
       }`;
     }
 
-    this.statusUrl = pull_request.statuses_url;
+    this.statusUrl = `${GITHUB_API_URL}/repos/${repository.full_name}/statuses/${pull_request.head.sha}`;
     this.installationId = id;
   }
 
@@ -71,7 +71,7 @@ class GithubRepo {
 
   async fetchPRLintJson({ accessToken }) {
     const failureMessages = [];
-
+    console.log('----------------------- 6 -----------------', this.prlintDotJsonUrl);
     const prlintDotJsonMeta = await got(this.prlintDotJsonUrl, {
       headers: {
         Accept: 'application/vnd.github.machine-man-preview+json',
@@ -83,6 +83,7 @@ class GithubRepo {
     let prlintDotJson;
     try {
       prlintDotJson = JSON.parse(Buffer.from(JSON.parse(prlintDotJsonMeta.body).content, 'base64'));
+      console.log('----------------------- 5 -----------------');
     } catch (e) {
       failureMessages.push(e);
     }
