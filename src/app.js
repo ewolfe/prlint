@@ -11,49 +11,30 @@ const Raven = setupErrorReporting();
 const accessTokens = {};
 
 async function updateShaStatus({ githubRepo, prlintDotJson, failureMessages, failureURLs, accessToken }) {
+  const bodyPayload = githubRepo.createBodyPayload({
+    failureMessages,
+    failureURLs,
+  });
   try {
-    const bodyPayload = githubRepo.createBodyPayload({
-      failureMessages,
-      failureURLs,
+    // Build up a status for sending to the pull request
+    // POST the status to the pull request
+    await githubRepo.postValidationStatus({
+      bodyPayload,
+      accessToken,
     });
-    try {
-      // Build up a status for sending to the pull request
-      // POST the status to the pull request
-      await githubRepo.postValidationStatus({
-        bodyPayload,
-        accessToken,
-      });
 
-      return { status: 200, payload: bodyPayload };
-    } catch (exception) {
-      console.log('----------------------- 1-----------------');
-      Raven.captureException(exception, { extra: prlintDotJson });
-
-      return {
-        status: 500,
-        payload: {
-          exception,
-          request_body: bodyPayload,
-          response: exception.response.body,
-        },
-      };
-    }
+    return { status: 200, payload: bodyPayload };
   } catch (exception) {
-    // If anyone of the "happy path" logic above failed
-    // then we post an update to the pull request that our
-    // application (PRLint) had issues, or that they're missing
-    // a configuration file (./.github/prlint.json)
-    console.log('----------------------- 2 -----------------');
-    let status = 200;
-    if (exception.response && exception.response.statusCode === 404) {
-      await githubRepo.post404Status({ accessToken });
-    } else {
-      status = 500;
-      Raven.captureException(exception);
-      await githubRepo.post500Status({ accessToken, exception });
-    }
+    Raven.captureException(exception, { extra: prlintDotJson });
 
-    return { status, payload: exception.toString() };
+    return {
+      status: 500,
+      payload: {
+        exception,
+        request_body: bodyPayload,
+        response: exception.response.body,
+      },
+    };
   }
 }
 
@@ -118,17 +99,25 @@ module.exports = async (req, res) => {
     }
 
     const githubRepo = new GithubRepo(body);
+    let accessToken = accessTokens[`${body.installation.id}`];
 
     try {
-      let accessToken = accessTokens[`${body.installation.id}`];
       if (
         !accessToken ||
         !new Date(accessToken.expires_at) > new Date() // make sure token expires in the future
       ) {
-        // token has expired or not valid. in this case, get a new one
-        accessToken = await githubRepo.getAccessToken({ JWT });
-        accessTokens[`${body.installation.id}`] = accessToken;
-        accessToken = accessTokens[`${body.installation.id}`].token;
+        try {
+          // token has expired or not valid. in this case, get a new one
+          accessToken = await githubRepo.getAccessToken({ JWT });
+          accessTokens[`${body.installation.id}`] = accessToken;
+          accessToken = accessTokens[`${body.installation.id}`].token;
+        } catch (exception) {
+          Raven.captureException(exception);
+          send(res, 500, {
+            token: accessTokens[`${body.installation.id}`],
+            exception,
+          });
+        }
       }
       // Initialize variables
       const failureMessages = [];
@@ -139,8 +128,6 @@ module.exports = async (req, res) => {
       });
 
       failureMessages.push(...prlintFetchFailureMsgs);
-      console.log('----------------------- 4 -----------------');
-      console.log(prlintDotJson, '\n', failureMessages);
 
       // Run each of the validations (regex's)
       if (prlintDotJson) {
@@ -161,12 +148,20 @@ module.exports = async (req, res) => {
       });
       send(res, status, payload);
     } catch (exception) {
-      console.log('----------------------- 3 -----------------');
-      Raven.captureException(exception);
-      send(res, 500, {
-        token: accessTokens[`${body.installation.id}`],
-        exception,
-      });
+      // If anyone of the "happy path" logic above failed
+      // then we post an update to the pull request that our
+      // application (PRLint) had issues, or that they're missing
+      // a configuration file (./.github/prlint.json)
+      let status = 200;
+      if (exception.response && exception.response.statusCode === 404) {
+        await githubRepo.post404Status({ accessToken });
+      } else {
+        status = 500;
+        Raven.captureException(exception);
+        await githubRepo.post500Status({ accessToken, exception });
+      }
+
+      send(res, status, exception.toString());
     }
   } else {
     // Redirect since we don't need anyone visiting our service

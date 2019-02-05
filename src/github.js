@@ -78,12 +78,11 @@ class GithubRepo {
         Authorization: `token ${accessToken}`,
       },
     });
-    console.log('----------------------- 6 -----------------', prlintDotJsonMeta);
+
     // Convert the base64 contents to an actual JSON object
     let prlintDotJson;
     try {
       prlintDotJson = JSON.parse(Buffer.from(JSON.parse(prlintDotJsonMeta.body).content, 'base64'));
-      console.log('----------------------- 5 -----------------');
     } catch (e) {
       failureMessages.push(e);
     }

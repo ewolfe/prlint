@@ -277,7 +277,7 @@ test('POST /webhook should add an error status when prlint.json is missing', asy
   nock.cleanAll();
 });
 
-test.only('POST /webhook should send error status in the event of an unknown error', async t => {
+test('POST /webhook should send error status in the event of an unknown error', async t => {
   // mock access_tokens response data from github
   const date = new Date();
   date.setDate(date.getDate() + 1 /* days  */);
