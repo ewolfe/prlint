@@ -128,8 +128,8 @@ module.exports = async (req, res) => {
         // token has expired or not valid. in this case, get a new one
         accessToken = await githubRepo.getAccessToken({ JWT });
         accessTokens[`${body.installation.id}`] = accessToken;
+        accessToken = accessTokens[`${body.installation.id}`].token;
       }
-
       // Initialize variables
       const failureMessages = [];
       const failureURLs = [];
