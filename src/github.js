@@ -61,24 +61,24 @@ class GithubRepo {
   }
 
   async getAccessToken({ JWT }) {
-    return got.post(`${GITHUB_API_URL}/installations/${this.installationId}/access_tokens`, {
+    const response = await got.post(`${GITHUB_API_URL}/installations/${this.installationId}/access_tokens`, {
       headers: {
         Accept: 'application/vnd.github.machine-man-preview+json',
         Authorization: `Bearer ${JWT}`,
       },
     });
+    return JSON.parse(response.body);
   }
 
   async fetchPRLintJson({ accessToken }) {
     const failureMessages = [];
-    console.log('----------------------- 6 -----------------', this.prlintDotJsonUrl);
     const prlintDotJsonMeta = await got(this.prlintDotJsonUrl, {
       headers: {
         Accept: 'application/vnd.github.machine-man-preview+json',
         Authorization: `token ${accessToken}`,
       },
     });
-
+    console.log('----------------------- 6 -----------------', prlintDotJsonMeta);
     // Convert the base64 contents to an actual JSON object
     let prlintDotJson;
     try {
