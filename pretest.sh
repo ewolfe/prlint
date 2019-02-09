@@ -1,1 +1,1 @@
-[ -f ./env ] && echo "Found .env" || echo "Copying .env.sample to .env" & cp ./.env.sample ./.env
+[ -f ./env ] && echo "Found .env" || echo "Copying .env.example to .env" & cp ./.env.example ./.env
