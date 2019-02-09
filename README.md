@@ -1,7 +1,8 @@
-
 # PRLint
 
 > GitHub App for linting pull requests
+
+Built with [Probot](https://github.com/probot/probot)
 
 [![Uptime Robot status](https://img.shields.io/uptimerobot/status/m779695827-b37294d12c5f3ad174528d33.svg)](https://stats.uptimerobot.com/ZzYnEf2BW)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ewolfe/prlint.svg)](https://greenkeeper.io/)
@@ -128,17 +129,17 @@ To target a nested object, you can use dot notation encoded within the key strin
 
 The top level values are where you get to define your validation rules. You can have multiples rules, so we expect an array (even if you only have a single validation rule).
 
-* Each item in the array needs to be an object:
-* `pattern:` javascript [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax)
-  * _Special characters must be escaped_
+- Each item in the array needs to be an object:
+- `pattern:` javascript [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#Syntax)
+  - _Special characters must be escaped_
     i.e. If you want to check for a whitespace, use `"pattern": "\\s"` vs `"pattern": "\s"`
-* `flags:` optional array of strings used in the [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
-  * For example, this can be used to make your regex case insensitive
-* `message`: optional string for customizing the error message on the pull request page
+- `flags:` optional array of strings used in the [Regular Expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+  - For example, this can be used to make your regex case insensitive
+- `message`: optional string for customizing the error message on the pull request page
 
 ## Credits
 
-* [“Dust Bunny”](https://thenounproject.com/term/lint/176538/) icon by Erika Kim from [the Noun Project](https://thenounproject.com/).
+- [“Dust Bunny”](https://thenounproject.com/term/lint/176538/) icon by Erika Kim from [the Noun Project](https://thenounproject.com/).
 
 ## License
 
@@ -152,6 +153,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
 <!-- prettier-ignore -->
 | [<img src="https://avatars3.githubusercontent.com/u/781818?v=4" width="100px;" alt="Hrusikesh Panda"/><br /><sub><b>Hrusikesh Panda</b></sub>](http://about.me/hkpanda)<br />[🚇](#infra-mrchief "Infrastructure (Hosting, Build-Tools, etc)") [⚠️](https://github.com/ewolfe/prlint/commits?author=mrchief "Tests") [💻](https://github.com/ewolfe/prlint/commits?author=mrchief "Code") |
 | :---: |
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
