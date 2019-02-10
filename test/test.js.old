@@ -9,10 +9,6 @@ const payloadNormal = require('./payload-normal.json');
 const prlintSampleConfig = require('./prlint-config-sample.json');
 const service = require('../index');
 
-const getSampleConfig = () => {
-  a;
-};
-
 test.beforeEach((t) => {
   nock.disableNetConnect();
   // Allow localhost connections so we can test local routes and mock servers.
