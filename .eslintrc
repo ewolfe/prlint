@@ -3,6 +3,10 @@
     "node": true,
     "jest/globals": true
   },
-  "extends": ["airbnb-base", "plugin:jest/recommended"],
+  "extends": [
+    "airbnb-base",
+    "plugin:jest/recommended",
+    "plugin:prettier/recommended"
+  ],
   "plugins": ["jest"]
 }
