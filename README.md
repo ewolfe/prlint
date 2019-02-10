@@ -8,6 +8,8 @@
 [![Build Status](https://travis-ci.org/ewolfe/prlint.svg?branch=master)](https://travis-ci.org/ewolfe/prlint)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fb62a8bd830f8ae59327/test_coverage)](https://codeclimate.com/github/ewolfe/prlint)
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+[![Join the community on Spectrum](https://withspectrum.github.io/badge/badge.svg)](https://spectrum.chat/prlint)
+
 
 ## The Problem
 
