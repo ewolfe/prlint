@@ -1,12 +1,12 @@
 // https://probot.github.io/api/latest/classes/context.html
 
-const log = require('./log.js');
+const log = require('./log');
 const { lint, defaultConfig } = require('./core');
 
 const APP_NAME = 'PRLint';
 
-module.exports = async (app, context) => {
-  const { repos } = context;
+module.exports = async (context) => {
+  const { repos } = context.github;
   const { sha } = context.payload.pull_request.head;
   const repo = context.repo();
   const defaultFailureURL = `${

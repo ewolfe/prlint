@@ -2,7 +2,7 @@ const lintPullRequest = require('./linter.js');
 const configureRoutes = require('./routes.js');
 
 module.exports = (app) => {
-  const router = app.route('prlint');
+  const router = app.route('/');
   configureRoutes(router);
 
   // https://developer.github.com/webhooks/#events

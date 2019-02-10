@@ -16,7 +16,7 @@ module.exports = (router) => {
     res.end(git.short());
   });
 
-  router.get('/', (req, res) => {
+  router.get('*', (req, res) => {
     // Redirect since we don't need anyone visiting our service
     // if they happen to stumble upon our URL
     res.writeHead(301, { Location: 'https://github.com/ewolfe/prlint' });

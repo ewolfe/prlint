@@ -9,7 +9,7 @@
     "dev": "concurrently \"env-cmd .env micro-dev\" \"lt --subdomain prlint --port 3000\"",
     "staging": "concurrently \"micro\" \"lt --subdomain prlint --port 3000\"",
     "start": "probot run ./index.js",
-    "pretest": "./pretest.sh",
+    "apretest": "./pretest.sh",
     "test": "nyc env-cmd .env ava --serial",
     "//": "echo 'we run ava in --serial because of issues with nock https://github.com/node-nock/nock/issues/541'",
     "posttest": "nyc report --reporter=lcov --reporter=html",
@@ -22,18 +22,17 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "husky": "^1.0.0",
+    "jest": "^24.1.0",
     "lint-staged": "^8.0.0",
     "nock": "^10.0.0",
     "nyc": "^13.0.1",
     "prettier": "1.15.2",
-    "test-listen": "^1.1.0",
-    "smee-client": "^1.0.2"
+    "smee-client": "^1.0.2",
+    "supertest": "^3.4.2"
   },
   "dependencies": {
     "flat": "^4.1.0",
-    "jsonwebtoken": "^8.3.0",
     "git-rev-sync": "^1.12.0",
-    "raven": "^2.6.4",
     "probot": "^7.2.0"
   },
   "husky": {
