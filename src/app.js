@@ -1,4 +1,4 @@
-const lintPullRequest = require('./linter.js');
+const lintPullRequest = require('./handler.js');
 const configureRoutes = require('./routes.js');
 
 module.exports = (app) => {
