@@ -53,6 +53,12 @@ describe('PRLint', () => {
   });
 
   describe('webhook', () => {
+    const pendingStatusBody = {
+      context: 'PRLint',
+      state: 'pending',
+      description: 'Waiting for the status to be reported',
+    };
+
     beforeEach(() => {
       nock('https://api.github.com')
         .post(
@@ -75,34 +81,26 @@ describe('PRLint', () => {
     });
 
     test('status update to pending', async () => {
+      const statusUrl = `/repos/${
+        payloadNormal.repository.full_name
+      }/statuses/${payloadNormal.pull_request.head.sha}`;
+
+      const successStatusBody = {
+        context: 'PRLint',
+        description: 'found  problems,  warnings',
+        state: 'success',
+      };
+
       nock('https://api.github.com')
-        .post(
-          `/repos/${payloadNormal.repository.full_name}/statuses/${
-            payloadNormal.pull_request.head.sha
-          }`,
-          (body) => {
-            expect(body).toMatchObject({
-              context: 'PRLint',
-              state: 'pending',
-              description: 'Waiting for the status to be reported',
-            });
-            return true;
-          },
-        )
+        .post(statusUrl, (body) => {
+          expect(body).toMatchObject(pendingStatusBody);
+          return true;
+        })
         .reply(200)
-        .post(
-          `/repos/${payloadNormal.repository.full_name}/statuses/${
-            payloadNormal.pull_request.head.sha
-          }`,
-          (body) => {
-            expect(body).toMatchObject({
-              context: 'PRLint',
-              description: 'found  problems,  warnings',
-              state: 'success',
-            });
-            return true;
-          },
-        )
+        .post(statusUrl, (body) => {
+          expect(body).toMatchObject(successStatusBody);
+          return true;
+        })
         .reply(200);
 
       await probot.receive({
@@ -112,35 +110,27 @@ describe('PRLint', () => {
     });
 
     test('POST /webhook should add a failure status to the PR if it doesn’t pass the users rules', async () => {
+      const statusUrl = `/repos/${
+        payloadFailure.repository.full_name
+      }/statuses/${payloadFailure.pull_request.head.sha}`;
+
+      const failureStatusBody = {
+        context: 'PRLint',
+        description:
+          'found Your PR title doesn’t match our schema,Your branch name is invalid problems, https://gph.is/1c4zf2O,https://gph.is/1c4zf2O warnings',
+        state: 'failed',
+      };
+
       nock('https://api.github.com')
-        .post(
-          `/repos/${payloadNormal.repository.full_name}/statuses/${
-            payloadNormal.pull_request.head.sha
-          }`,
-          (body) => {
-            expect(body).toMatchObject({
-              context: 'PRLint',
-              state: 'pending',
-              description: 'Waiting for the status to be reported',
-            });
-            return true;
-          },
-        )
+        .post(statusUrl, (body) => {
+          expect(body).toMatchObject(pendingStatusBody);
+          return true;
+        })
         .reply(200)
-        .post(
-          `/repos/${payloadNormal.repository.full_name}/statuses/${
-            payloadNormal.pull_request.head.sha
-          }`,
-          (body) => {
-            expect(body).toMatchObject({
-              context: 'PRLint',
-              description:
-                'found Your PR title doesn’t match our schema,Your branch name is invalid problems, https://gph.is/1c4zf2O,https://gph.is/1c4zf2O warnings',
-              state: 'success',
-            });
-            return true;
-          },
-        )
+        .post(statusUrl, (body) => {
+          expect(body).toMatchObject(failureStatusBody);
+          return true;
+        })
         .reply(200);
 
       await probot.receive({
