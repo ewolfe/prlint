@@ -91,14 +91,17 @@ describe('PRLint', () => {
         state: 'success',
       };
 
-      nock('https://api.github.com')
+      let actualPendingStatus;
+      let actualSuccessStatus;
+
+      const scope = nock('https://api.github.com')
         .post(statusUrl, (body) => {
-          expect(body).toMatchObject(pendingStatusBody);
+          actualPendingStatus = body;
           return true;
         })
         .reply(200)
         .post(statusUrl, (body) => {
-          expect(body).toMatchObject(successStatusBody);
+          actualSuccessStatus = body;
           return true;
         })
         .reply(200);
@@ -107,6 +110,10 @@ describe('PRLint', () => {
         name: 'pull_request',
         payload: payloadNormal,
       });
+
+      expect(scope.isDone()).toBe(true);
+      expect(actualPendingStatus).toMatchObject(pendingStatusBody);
+      expect(actualSuccessStatus).toMatchObject(successStatusBody);
     });
 
     test('POST /webhook should add a failure status to the PR if it doesn’t pass the users rules', async () => {
@@ -121,14 +128,17 @@ describe('PRLint', () => {
         state: 'failed',
       };
 
-      nock('https://api.github.com')
+      let actualPendingStatus;
+      let actualFailureStatus;
+
+      const scope = nock('https://api.github.com')
         .post(statusUrl, (body) => {
-          expect(body).toMatchObject(pendingStatusBody);
+          actualPendingStatus = body;
           return true;
         })
         .reply(200)
         .post(statusUrl, (body) => {
-          expect(body).toMatchObject(failureStatusBody);
+          actualPendingStatus = body;
           return true;
         })
         .reply(200);
@@ -137,6 +147,10 @@ describe('PRLint', () => {
         name: 'pull_request',
         payload: payloadFailure,
       });
+
+      expect(scope.isDone()).toBe(true);
+      expect(actualPendingStatus).toMatchObject(pendingStatusBody);
+      expect(actualFailureStatus).toMatchObject(failureStatusBody);
     });
   });
 });
