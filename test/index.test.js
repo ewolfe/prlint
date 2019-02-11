@@ -87,7 +87,7 @@ describe('PRLint', () => {
 
       const successStatusBody = {
         context: 'PRLint',
-        description: 'found  problems,  warnings',
+        description: 'Your validation rules passed',
         state: 'success',
       };
 
@@ -97,12 +97,12 @@ describe('PRLint', () => {
       const scope = nock('https://api.github.com')
         .post(statusUrl, (body) => {
           actualPendingStatus = body;
-          return true;
+          return body;
         })
         .reply(200)
         .post(statusUrl, (body) => {
           actualSuccessStatus = body;
-          return true;
+          return body;
         })
         .reply(200);
 
@@ -123,9 +123,8 @@ describe('PRLint', () => {
 
       const failureStatusBody = {
         context: 'PRLint',
-        description:
-          'found Your PR title doesn’t match our schema,Your branch name is invalid problems, https://gph.is/1c4zf2O,https://gph.is/1c4zf2O warnings',
-        state: 'failed',
+        description: '1/1: Your PR title doesn’t match our schema',
+        state: 'failure',
       };
 
       let actualPendingStatus;
@@ -138,7 +137,7 @@ describe('PRLint', () => {
         })
         .reply(200)
         .post(statusUrl, (body) => {
-          actualPendingStatus = body;
+          actualFailureStatus = body;
           return true;
         })
         .reply(200);
