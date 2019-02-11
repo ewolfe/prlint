@@ -15,13 +15,9 @@ default_events:
   - pull_request
 
 default_permissions:
-  # Checks on code.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-checks
-  checks: write
-
-  # Repository contents, commits, branches, downloads, releases, and merges.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-contents
-  contents: read
+  # Commit statuses.
+  # https://developer.github.com/v3/apps/permissions/#permission-on-statuses
+  statuses: write
 
   # Search repositories, list collaborators, and access repository metadata.
   # https://developer.github.com/v3/apps/permissions/#metadata-permissions
@@ -29,7 +25,12 @@ default_permissions:
 
   # Pull requests and related comments, assignees, labels, milestones, and merges.
   # https://developer.github.com/v3/apps/permissions/#permission-on-pull-requests
-  pull_requests: write
+  pull_requests: read
+
+  # Single file read
+  single_file: read
+
+single_file_name: '.github/prlint.json'
 
 name: PRLint
 url: https://github.com/apps/prlint
