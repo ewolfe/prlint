@@ -7,22 +7,35 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/src/app.js"
+            "name": "Jest Current File",
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "args": [
+                "${relativeFile}",
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "windows": {
+                "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            },
+            "env": {
+                "timeout": "60000"
+            }
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Run AVA test",
-            "program": "${workspaceFolder}/node_modules/ava/profile.js",
+            "name": "Jest All",
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
             "args": [
-                "${file}",
-                "--serial"
+                "--runInBand"
             ],
-            "envFile": "${workspaceFolder}/.env",
-            "skipFiles": [
-                "<node_internals>/**/*.js"
-            ]
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "windows": {
+                "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+            }
         }
     ]
 }
