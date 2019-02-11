@@ -1,7 +1,7 @@
 {
   "name": "prlint",
-  "version": "1.0.0",
-  "main": "src/app.js",
+  "version": "2.0.0",
+  "main": "index.js",
   "repository": "git@github.com:ewolfe/prlint.git",
   "author": "ewolfe <e@ewolfe.me>",
   "license": "MIT",
