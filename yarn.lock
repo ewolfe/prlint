@@ -152,6 +152,11 @@
     buffer-equal-constant-time "^1.0.1"
     debug "^4.0.0"
 
+"@probot/serverless-lambda@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@probot/serverless-lambda/-/serverless-lambda-0.2.0.tgz#09ec3c5b77486d8e5e406337b8d46a38418d1019"
+  integrity sha512-fVcmZpd5xF5HjjWJghHMngiRWgssGtEb0FP75XTWfQjHAq+joYSIPwGzXPpcG0vVUnLLsgyRj/fvBr9TQy45tQ==
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"

@@ -1,13 +1,25 @@
 {
   "name": "prlint",
-  "alias": "prlint",
+  "version": 2,
+  "alias": "prlint-staging",
   "env": {
-    "PRIVATE_KEY_B64": "@prlint-private-key"
+    "PRIVATE_KEY": "@prlint-private-key",
+    "WEBHOOK_SECRET": "@prlint-webhook-secret",
+    "NODE_ENV": "production"
   },
-  "files": [
-    ".git/HEAD",
-    ".git/packed-refs",
-    ".git/refs/heads/master",
-    "src"
+  "builds": [
+    {
+      "src": "*.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "handler.js"
+    }
+  ],
+  "regions": [
+    "all"
   ]
 }
