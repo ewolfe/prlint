@@ -93,7 +93,7 @@ async function updateShaStatus(body, res) {
         description = `1/${failureMessages.length - 1}: ${description}`;
         URL = defaultFailureURL;
       }
-      if (description) {
+      if (description && typeof description.slice === 'function') {
         bodyPayload = {
           state: 'failure',
           description: description.slice(0, 140), // 140 characters is a GitHub limit
