@@ -1250,6 +1250,11 @@ commander@^2.14.1, commander@^2.9.0:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.15.1.tgz#df46e867d0fc2aec66a34662b406a9ccafff5b0f"
 
+commander@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-3.0.0.tgz#0641ea00838c7a964627f04cddc336a2deddd60a"
+  integrity sha512-pl3QrGOBa9RZaslQiqnnKX2J068wcQw7j9AIaBQ9/JEp5RY6je4jKTImg0Bd+rpoONSe7GUFSgkxLeo17m3Pow==
+
 commander@~2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
@@ -1702,11 +1707,13 @@ entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
-env-cmd@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/env-cmd/-/env-cmd-8.0.2.tgz#e3bf53b8e4676781bdc3a0b1a2f7612cbcda4da4"
+env-cmd@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/env-cmd/-/env-cmd-10.0.0.tgz#0a7ae472b777001e349406de73e32335b3af0281"
+  integrity sha512-domhGomivBO2QL2h5JiQzX204fUEEVpuNiI0EQV2q3dXQPJu1QSd36DAmEvv52V893YiJ8S4QxrmfS67j2S3ZQ==
   dependencies:
-    cross-spawn "^6.0.5"
+    commander "^3.0.0"
+    cross-spawn "^6.0.0"
 
 equal-length@^1.0.0:
   version "1.0.1"
