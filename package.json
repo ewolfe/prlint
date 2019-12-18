@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "ava": "^0.25.0",
-    "concurrently": "^4.0.1",
+    "concurrently": "^5.0.2",
     "env-cmd": "^8.0.2",
     "eslint": "^5.5.0",
     "eslint-config-airbnb-base": "^13.1.0",
