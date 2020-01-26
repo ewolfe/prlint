@@ -16,7 +16,7 @@
     "lint": "eslint ./src/**/*.js ./test/**/*.js"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
+    "ava": "^3.1.0",
     "concurrently": "^4.0.1",
     "env-cmd": "^8.0.2",
     "eslint": "^5.5.0",
