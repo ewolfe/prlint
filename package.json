@@ -39,7 +39,7 @@
     "jsonwebtoken": "^8.3.0",
     "micro": "^9.3.3",
     "raven": "^2.6.4",
-    "request": "^2.88.0"
+    "request": "^2.88.2"
   },
   "husky": {
     "hooks": {
